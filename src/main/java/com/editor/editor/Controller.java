@@ -77,4 +77,37 @@ public class Controller {
     void espelhar(ActionEvent event) {
         transformacoes.espelharImagem(imagemOriginal, imagemAlterada);
     }
+
+    @FXML
+    void espelharHorizontal(ActionEvent event) {
+        // TODO: implementar espelhamento horizontal
+        System.out.println("Espelhar Horizontal chamado");
+    }
+
+    @FXML
+    void espelharVertical(ActionEvent event) {
+        // TODO: implementar espelhamento vertical
+        System.out.println("Espelhar Vertical chamado");
+    }
+
+    @FXML
+    void aumentar(ActionEvent event) {
+        // TODO: implementar zoom aumentar
+        System.out.println("Aumentar chamado");
+    }
+
+    @FXML
+    void diminuir(ActionEvent event) {
+        // TODO: implementar zoom diminuir
+        System.out.println("Diminuir chamado");
+    }
+
+    @FXML
+    void rotacionar(ActionEvent event) {
+        // TODO: implementar rotação
+        System.out.println("Rotacionar chamado");
+    }
+
 }
+
+
