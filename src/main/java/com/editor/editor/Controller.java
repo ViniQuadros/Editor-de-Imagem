@@ -5,6 +5,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
@@ -13,7 +15,11 @@ import java.io.File;
 
 public class Controller {
     //Classes de Efeito
-    private Transformacoes transformacoes = new  Transformacoes();
+    private final Transformacoes transformacoes = new  Transformacoes();
+
+    //SplitPane
+    @FXML
+    private SplitPane splitPane;
 
     //Imagens
     @FXML
@@ -27,6 +33,14 @@ public class Controller {
     @FXML
     private MenuItem sairMenu;
 
+    //Inputs de Efeito na Imagem
+    @FXML
+    private TextField valorTransladarX;
+    @FXML
+    private TextField valorTransladarY;
+    @FXML
+    private TextField valorAngulo;
+
     //Botões de Efeito na Imagem
 
     //Transformações
@@ -34,6 +48,12 @@ public class Controller {
     private Button transladarBtn;
     @FXML
     private Button espelharBtn;
+
+    //Inicialização
+    @FXML
+    public void initialize(){
+
+    }
 
     //Funções do Menu do Topo
     @FXML
@@ -70,12 +90,15 @@ public class Controller {
     //Funções de Transformacao
     @FXML
     void transladar(ActionEvent event) {
-        transformacoes.transladarImagem(50,60, imagemOriginal, imagemAlterada);
+        int x =  Integer.parseInt(valorTransladarX.getText());
+        int y =  Integer.parseInt(valorTransladarY.getText());
+        transformacoes.transladarImagem(x,y, imagemOriginal, imagemAlterada);
     }
 
     @FXML
-    void espelhar(ActionEvent event) {
-        transformacoes.espelharImagem(imagemOriginal, imagemAlterada);
+    void rotacionar(ActionEvent event) {
+        int angulo = Integer.parseInt(valorAngulo.getText());
+        transformacoes.rotacionarImagem(angulo, imagemOriginal, imagemAlterada);
     }
 
     @FXML
@@ -101,13 +124,6 @@ public class Controller {
         // TODO: implementar zoom diminuir
         System.out.println("Diminuir chamado");
     }
-
-    @FXML
-    void rotacionar(ActionEvent event) {
-        // TODO: implementar rotação
-        System.out.println("Rotacionar chamado");
-    }
-
 }
 
 
