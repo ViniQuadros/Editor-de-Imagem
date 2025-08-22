@@ -103,14 +103,12 @@ public class Controller {
 
     @FXML
     void espelharHorizontal(ActionEvent event) {
-        // TODO: implementar espelhamento horizontal
-        System.out.println("Espelhar Horizontal chamado");
+        transformacoes.espelharHorizontal(imagemAlterada, imagemAlterada);
     }
 
     @FXML
     void espelharVertical(ActionEvent event) {
-        // TODO: implementar espelhamento vertical
-        System.out.println("Espelhar Vertical chamado");
+        transformacoes.espelharVertical(imagemAlterada, imagemAlterada);
     }
 
     @FXML
