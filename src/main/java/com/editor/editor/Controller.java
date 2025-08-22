@@ -1,7 +1,6 @@
 package com.editor.editor;
 
 import javafx.application.Platform;
-//import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -10,9 +9,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
+import javafx.embed.swing.SwingFXUtils;
 
 import javax.imageio.ImageIO;
 import java.io.File;
+import java.util.Objects;
+import java.util.Stack;
 
 public class Controller {
     // Classes de Efeito
@@ -39,6 +41,11 @@ public class Controller {
     private ImageView imagemAlterada;
     @FXML
     private ImageView imagemOriginal;
+
+    //Controle das images a serem desfeitas e refeitas
+    Stack<Image> ultimaImagem = new Stack<>();
+    private Image imagemAnterior;
+    private Image refazerImagem;
 
     // Menus do Topo
     @FXML
@@ -69,6 +76,14 @@ public class Controller {
     // Inicialização
     @FXML
     public void initialize() {
+        try{
+            Image lena = new Image(Objects.requireNonNull(getClass().getResource("/images/Lena.jpeg")).toExternalForm());
+            imagemOriginal.setImage(lena);
+            imagemAlterada.setImage(lena);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         // Input
         imagemOriginal.fitWidthProperty().bind(inputImageContainer.widthProperty());
         imagemOriginal.fitHeightProperty().bind(inputImageContainer.heightProperty());
@@ -142,7 +157,7 @@ public class Controller {
                     format = "jpg";
                 }
 
-                //ImageIO.write(SwingFXUtils.fromFXImage(image, null), format, file);
+                ImageIO.write(SwingFXUtils.fromFXImage(image, null), format, file);
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Sucesso");
                 alert.setHeaderText("Imagem salva em " + file.getAbsolutePath());
@@ -159,6 +174,22 @@ public class Controller {
     }
 
     @FXML
+    void desfazer(ActionEvent event) {
+        if(!ultimaImagem.isEmpty()){
+            refazerImagem = imagemAlterada.getImage();
+            imagemAnterior = ultimaImagem.pop();
+            imagemAlterada.setImage(imagemAnterior);
+        }
+    }
+
+    @FXML
+    void refazer(ActionEvent event) {
+        if(refazerImagem != null){
+            imagemAlterada.setImage(refazerImagem);
+        }
+    }
+
+    @FXML
     void resetarPosicao(ActionEvent event) {
         splitPane.setDividerPositions(0.3, 0.65);
     }
@@ -167,7 +198,7 @@ public class Controller {
     void sobre(ActionEvent event) {
         Alert sobrePrograma = new Alert(Alert.AlertType.CONFIRMATION);
         sobrePrograma.setTitle("Sobre o Programa");
-        sobrePrograma.setHeaderText("Editor de Imagens \n Projeto de PDI");
+        sobrePrograma.setHeaderText("Editor de Imagens \nProjeto de PDI");
         sobrePrograma.showAndWait();
     }
 
@@ -176,6 +207,7 @@ public class Controller {
     // Funções de Transformacao
     @FXML
     void transladar(ActionEvent event) {
+        ultimaImagem.push(imagemAlterada.getImage());
         int x = Integer.parseInt(valorTransladarX.getText());
         int y = Integer.parseInt(valorTransladarY.getText());
         transformacoes.transladarImagem(x, y, imagemOriginal, imagemAlterada);
@@ -183,17 +215,20 @@ public class Controller {
 
     @FXML
     void rotacionar(ActionEvent event) {
+        ultimaImagem.push(imagemAlterada.getImage());
         int angulo = Integer.parseInt(valorAngulo.getText());
         transformacoes.rotacionarImagem(angulo, imagemOriginal, imagemAlterada);
     }
 
     @FXML
     void espelharHorizontal(ActionEvent event) {
+        ultimaImagem.push(imagemAlterada.getImage());
         transformacoes.espelharHorizontal(imagemAlterada, imagemAlterada);
     }
 
     @FXML
     void espelharVertical(ActionEvent event) {
+        ultimaImagem.push(imagemAlterada.getImage());
         transformacoes.espelharVertical(imagemAlterada, imagemAlterada);
     }
 

@@ -36,8 +36,8 @@
                 </Menu>
                 <Menu text="Edição">
                     <items>
-                        <MenuItem text="Desfazer" />
-                        <MenuItem text="Refazer" />
+                        <MenuItem fx:id="desfazerMenu" onAction="#desfazer" text="Desfazer" />
+                        <MenuItem fx:id="refazerMenu" onAction="#refazer" text="Refazer" />
                         <MenuItem fx:id="resetarPosicaoMenu" onAction="#resetarPosicao" text="Resetar Posição" />
                     </items>
                 </Menu>
@@ -46,6 +46,17 @@
                         <MenuItem fx:id="sobreMenu" onAction="#sobre" text="Sobre o Programa" />
                     </items>
                 </Menu>
+            <Menu text="Temas">
+               <items>
+                  <MenuItem text="Light" />
+                  <MenuItem text="Dark" />
+               </items>
+            </Menu>
+            <Menu text="Sobre">
+               <items>
+                  <MenuItem fx:id="sobreMenu11" onAction="#sobre" text="Sobre o Programa" />
+               </items>
+            </Menu>
             </menus>
         </MenuBar>
 
