@@ -189,12 +189,12 @@ public class Controller {
 
     @FXML
     void espelharHorizontal(ActionEvent event) {
-        System.out.println("Espelhar Horizontal chamado");
+        transformacoes.espelharHorizontal(imagemAlterada, imagemAlterada);
     }
 
     @FXML
     void espelharVertical(ActionEvent event) {
-        System.out.println("Espelhar Vertical chamado");
+        transformacoes.espelharVertical(imagemAlterada, imagemAlterada);
     }
 
     @FXML
