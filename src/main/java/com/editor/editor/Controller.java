@@ -1,39 +1,56 @@
 package com.editor.editor;
 
 import javafx.application.Platform;
+//import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 
+import javax.imageio.ImageIO;
 import java.io.File;
 
 public class Controller {
-    //Classes de Efeito
-    private final Transformacoes transformacoes = new  Transformacoes();
+    // Classes de Efeito
+    private final Transformacoes transformacoes = new Transformacoes();
 
-    //SplitPane
+    // SplitPane
     @FXML
     private SplitPane splitPane;
 
-    //Imagens
+    // Anchors
+    @FXML
+    private AnchorPane inputPane;
+    @FXML
+    private AnchorPane outputPane;
+
+    // StackPanes
+    @FXML
+    private StackPane inputImageContainer;
+    @FXML
+    private StackPane outputImageContainer;
+
+    // Imagens
     @FXML
     private ImageView imagemAlterada;
     @FXML
     private ImageView imagemOriginal;
 
-    //Menus do Topo
+    // Menus do Topo
     @FXML
     private MenuItem abrirImagemMenu;
     @FXML
     private MenuItem sairMenu;
+    @FXML
+    private MenuItem resetarPosicaoMenu;
+    @FXML
+    private MenuItem sobreMenu;
 
-    //Inputs de Efeito na Imagem
+    // Inputs de Efeito na Imagem
     @FXML
     private TextField valorTransladarX;
     @FXML
@@ -41,21 +58,39 @@ public class Controller {
     @FXML
     private TextField valorAngulo;
 
-    //Botões de Efeito na Imagem
+    // Botões de Efeito na Imagem
 
-    //Transformações
+    // Transformações
     @FXML
     private Button transladarBtn;
     @FXML
     private Button espelharBtn;
 
-    //Inicialização
+    // Inicialização
     @FXML
-    public void initialize(){
+    public void initialize() {
+        // Input
+        imagemOriginal.fitWidthProperty().bind(inputImageContainer.widthProperty());
+        imagemOriginal.fitHeightProperty().bind(inputImageContainer.heightProperty());
+        imagemOriginal.setPreserveRatio(true);
 
+        // Output
+        imagemAlterada.fitWidthProperty().bind(outputImageContainer.widthProperty());
+        imagemAlterada.fitHeightProperty().bind(outputImageContainer.heightProperty());
+        imagemAlterada.setPreserveRatio(true);
+
+//         // Input
+//         imagemOriginal.fitWidthProperty().bind(inputPane.widthProperty());
+//         imagemOriginal.fitHeightProperty().bind(inputPane.heightProperty());
+//         imagemOriginal.setPreserveRatio(true);
+//
+//         // Output
+//         imagemAlterada.fitWidthProperty().bind(outputPane.widthProperty());
+//         imagemAlterada.fitHeightProperty().bind(outputPane.heightProperty());
+//         imagemAlterada.setPreserveRatio(true);
     }
 
-    //Funções do Menu do Topo
+    // Funções do Menu do Topo
     @FXML
     void openImage(ActionEvent event) {
         // Cria o seletor de arquivos
@@ -64,8 +99,7 @@ public class Controller {
 
         // Define os tipos de arquivo permitidos
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Imagens", "*.png", "*.jpg", "*.jpeg")
-        );
+                new FileChooser.ExtensionFilter("Imagens", "*.png", "*.jpg", "*.jpeg"));
 
         // Abre a janela para escolher o arquivo
         File file = fileChooser.showOpenDialog(((MenuItem) event.getSource()).getParentPopup().getOwnerWindow());
@@ -81,18 +115,70 @@ public class Controller {
     }
 
     @FXML
+    void salvarImagem(ActionEvent event) {
+        Image image = imagemAlterada.getImage();
+        if (image == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Aviso");
+            alert.setHeaderText("Nenhuma imagem para ser salva!");
+            alert.showAndWait();
+        }
+
+        // Configura o seletor
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Salvar Imagem");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("PNG", "*.png"),
+                new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+                new FileChooser.ExtensionFilter("JPEG", "*.jpeg"));
+
+        // Abre a janela
+        File file = fileChooser.showSaveDialog(imagemAlterada.getScene().getWindow());
+        if (file != null) {
+            try {
+                String fileName = file.getName().toLowerCase();
+                String format = "png";
+                if (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg")) {
+                    format = "jpg";
+                }
+
+                //ImageIO.write(SwingFXUtils.fromFXImage(image, null), format, file);
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Sucesso");
+                alert.setHeaderText("Imagem salva em " + file.getAbsolutePath());
+                alert.showAndWait();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @FXML
     void sair(ActionEvent event) {
         Platform.exit();
     }
 
-    //Funções de Efeito
+    @FXML
+    void resetarPosicao(ActionEvent event) {
+        splitPane.setDividerPositions(0.3, 0.65);
+    }
 
-    //Funções de Transformacao
+    @FXML
+    void sobre(ActionEvent event) {
+        Alert sobrePrograma = new Alert(Alert.AlertType.CONFIRMATION);
+        sobrePrograma.setTitle("Sobre o Programa");
+        sobrePrograma.setHeaderText("Editor de Imagens \n Projeto de PDI");
+        sobrePrograma.showAndWait();
+    }
+
+    // Funções de Efeito
+
+    // Funções de Transformacao
     @FXML
     void transladar(ActionEvent event) {
-        int x =  Integer.parseInt(valorTransladarX.getText());
-        int y =  Integer.parseInt(valorTransladarY.getText());
-        transformacoes.transladarImagem(x,y, imagemOriginal, imagemAlterada);
+        int x = Integer.parseInt(valorTransladarX.getText());
+        int y = Integer.parseInt(valorTransladarY.getText());
+        transformacoes.transladarImagem(x, y, imagemOriginal, imagemAlterada);
     }
 
     @FXML
@@ -113,15 +199,11 @@ public class Controller {
 
     @FXML
     void aumentar(ActionEvent event) {
-        // TODO: implementar zoom aumentar
         System.out.println("Aumentar chamado");
     }
 
     @FXML
     void diminuir(ActionEvent event) {
-        // TODO: implementar zoom diminuir
         System.out.println("Diminuir chamado");
     }
 }
-
-

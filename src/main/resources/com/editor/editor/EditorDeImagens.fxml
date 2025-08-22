@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -16,126 +17,115 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.editor.editor.Controller">
+<VBox fillWidth="true" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.editor.editor.Controller">
+
     <children>
+        <!-- Barra de menu fixa no topo -->
         <MenuBar VBox.vgrow="NEVER">
             <menus>
-                <Menu mnemonicParsing="false" text="Arquivo">
+                <Menu text="Arquivo">
                     <items>
-                        <MenuItem fx:id="abrirImagemMenu" mnemonicParsing="false" onAction="#openImage" text="Abrir Imagem" />
-                        <MenuItem mnemonicParsing="false" text="Salvar Imagem" />
-                        <Menu mnemonicParsing="false" text="Abrir Recente" />
-                        <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem fx:id="sairMenu" mnemonicParsing="false" onAction="#sair" text="Sair" />
+                        <MenuItem fx:id="abrirImagemMenu" onAction="#openImage" text="Abrir Imagem" />
+                        <MenuItem onAction="#salvarImagem" text="Salvar Imagem" />
+                        <Menu text="Abrir Recente" />
+                        <SeparatorMenuItem />
+                        <MenuItem fx:id="sairMenu" onAction="#sair" text="Sair" />
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Edição">
+                <Menu text="Edição">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Desfazer" />
-                        <MenuItem mnemonicParsing="false" text="Refazer" />
+                        <MenuItem text="Desfazer" />
+                        <MenuItem text="Refazer" />
+                        <MenuItem fx:id="resetarPosicaoMenu" onAction="#resetarPosicao" text="Resetar Posição" />
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Sobre">
+                <Menu text="Sobre">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Sobre o Programa" />
+                        <MenuItem fx:id="sobreMenu" onAction="#sobre" text="Sobre o Programa" />
                     </items>
                 </Menu>
             </menus>
         </MenuBar>
 
-        <SplitPane fx:id="splitPane" dividerPositions="0.27" prefHeight="589.0" prefWidth="900.0">
+        <!-- SplitPane expansível ocupa o restante da altura -->
+        <SplitPane fx:id="splitPane" dividerPositions="0.3, 0.65" VBox.vgrow="ALWAYS">
             <items>
-                <!-- Painel lateral -->
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="573.0" prefWidth="256.0">
+
+                <!-- Painel lateral (preenche e rola com a janela) -->
+                <AnchorPane minWidth="0.0">
                     <children>
-                        <Accordion prefHeight="573.0">
+                        <Accordion AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                             <panes>
+
                                 <!-- Transformações -->
-                                <TitledPane text="Transformações" textAlignment="CENTER">
+                                <TitledPane text="Transformações">
                                     <content>
-                                        <VBox spacing="5.0">
-                                            <children>
-                                                <Button fx:id="transladarBtn" prefWidth="219.0" text="Transladar" />
-                                                <HBox alignment="CENTER" spacing="10">
-                                                    <children>
-                                                        <Label text="X:" />
-                                                        <TextField fx:id="valorTransladarX" onAction="#transladar" prefWidth="35.0" text="0" />
-                                                        <Label text="Y:" />
-                                                        <TextField fx:id="valorTransladarY" onAction="#transladar" prefWidth="35.0" text="0" />
-                                                    </children>
-                                                </HBox>
+                                        <VBox alignment="TOP_CENTER" spacing="8">
+                                            <Button fx:id="transladarBtn" text="Transladar" />
+                                            <HBox alignment="CENTER" spacing="10">
+                                                <Label text="X:" />
+                                                <TextField fx:id="valorTransladarX" onAction="#transladar" prefWidth="60" text="0" />
+                                                <Label text="Y:" />
+                                                <TextField fx:id="valorTransladarY" onAction="#transladar" prefWidth="60" text="0" />
+                                            </HBox>
 
-                                                <Button prefWidth="219.0" text="Rotacionar" />
-                                                <HBox alignment="CENTER" spacing="10">
-                                                    <children>
-                                                        <Label text="Ângulo:" />
-                                                        <TextField fx:id="valorAngulo" onAction="#rotacionar" prefWidth="35.0" text="0" />
-                                                    </children>
-                                                </HBox>
+                                            <Button text="Rotacionar" />
+                                            <HBox alignment="CENTER" spacing="10">
+                                                <Label text="Ângulo:" />
+                                                <TextField fx:id="valorAngulo" onAction="#rotacionar" prefWidth="80" text="0" />
+                                            </HBox>
 
-                                                <Button fx:id="espelharBtn" prefWidth="219.0" text="Espelhar" />
-                                                <HBox alignment="CENTER" spacing="10">
-                                                    <children>
-                                                        <Button fx:id="espelharHBtn" onAction="#espelharHorizontal" text="Horizontal" />
-                                                        <Button fx:id="espelharVBtn" onAction="#espelharVertical" text="Vertical" />
-                                                    </children>
-                                                </HBox>
+                                            <Button fx:id="espelharBtn" text="Espelhar" />
+                                            <HBox alignment="CENTER" spacing="10">
+                                                <Button fx:id="espelharHBtn" onAction="#espelharHorizontal" text="Horizontal" />
+                                                <Button fx:id="espelharVBtn" onAction="#espelharVertical" text="Vertical" />
+                                            </HBox>
 
-                                                <Button fx:id="aumentarBtn" onAction="#aumentar" prefWidth="219.0" text="Aumentar" />
-                                                <Button fx:id="diminuirBtn" onAction="#diminuir" prefWidth="219.0" text="Diminuir" />
-                                            </children>
+                                            <Button fx:id="aumentarBtn" onAction="#aumentar" text="Aumentar" />
+                                            <Button fx:id="diminuirBtn" onAction="#diminuir" text="Diminuir" />
                                         </VBox>
                                     </content>
                                 </TitledPane>
 
                                 <!-- Filtros -->
-                                <TitledPane prefHeight="498.0" text="Filtros" textAlignment="CENTER">
+                                <TitledPane text="Filtros">
                                     <content>
-                                        <VBox spacing="5.0">
-                                            <children>
-                                                <Button prefWidth="219.0" text="Brilho" />
-                                                <HBox alignment="CENTER" spacing="5">
-                                                    <children>
-                                                        <Label text="0%" />
-                                                        <Slider />
-                                                        <Label text="100%" />
-                                                    </children>
-                                                </HBox>
-                                                <Button prefWidth="219.0" text="Contraste" />
-                                                <Button prefWidth="219.0" text="GreyScale" />
-                                                <Button prefWidth="219.0" text="Passa Alta" />
-                                                <Button prefWidth="219.0" text="Passa Baixa" />
-                                                <Button prefWidth="219.0" text="Threshold" />
-                                                <Button prefWidth="219.0" text="Afinamento" />
-                                            </children>
+                                        <VBox alignment="TOP_CENTER" spacing="8">
+                                            <Button text="Brilho" />
+                                            <HBox alignment="CENTER" spacing="8">
+                                                <Label text="0%" />
+                                                <Slider />
+                                                <Label text="100%" />
+                                            </HBox>
+                                            <Button text="Contraste" />
+                                            <Button text="GreyScale" />
+                                            <Button text="Passa Alta" />
+                                            <Button text="Passa Baixa" />
+                                            <Button text="Threshold" />
+                                            <Button text="Afinamento" />
                                         </VBox>
                                     </content>
                                 </TitledPane>
 
                                 <!-- Morfologia -->
-                                <TitledPane prefHeight="498.0" text="Morfologia Matemática" textAlignment="CENTER">
+                                <TitledPane text="Morfologia Matemática">
                                     <content>
-                                        <VBox spacing="5">
-                                            <children>
-                                                <Button prefWidth="219.0" text="Dilatação" />
-                                                <Button prefWidth="219.0" text="Erosão" />
-                                                <Button prefWidth="219.0" text="Abertura" />
-                                                <Button prefWidth="219.0" text="Fechamento" />
-                                            </children>
+                                        <VBox alignment="TOP_CENTER" spacing="8">
+                                            <Button text="Dilatação" />
+                                            <Button text="Erosão" />
+                                            <Button text="Abertura" />
+                                            <Button text="Fechamento" />
                                         </VBox>
                                     </content>
                                 </TitledPane>
 
                                 <!-- Extração -->
-                                <TitledPane prefHeight="498.0" text="Extração de Características" textAlignment="CENTER">
+                                <TitledPane text="Extração de Características">
                                     <content>
-                                        <VBox>
-                                            <children>
-                                                <Button prefWidth="219.0" text="Desafio" />
-                                            </children>
+                                        <VBox alignment="TOP_CENTER" spacing="8">
+                                            <Button text="Desafio" />
                                         </VBox>
                                     </content>
                                 </TitledPane>
@@ -145,28 +135,61 @@
                     </children>
                 </AnchorPane>
 
-                <!-- Área central -->
-                <AnchorPane>
+                <!-- Área central (Input) -->
+                <AnchorPane fx:id="inputPane" minWidth="0.0">
                     <children>
-                        <Label layoutX="138.0" layoutY="48.0" text="Input">
-                            <font><Font size="20.0" /></font>
-                        </Label>
-                        <Label layoutX="450.0" layoutY="48.0" text="Output">
-                            <font><Font size="20.0" /></font>
-                        </Label>
-                        <Line endY="2000.0" layoutX="322.0" layoutY="98.0" startY="-100.0" />
-                  <StackPane layoutX="365.0" layoutY="179.0" prefHeight="150.0" prefWidth="200.0">
-                     <children>
-                              <ImageView fx:id="imagemAlterada" fitHeight="222.0" fitWidth="233.0" preserveRatio="true" />
-                     </children>
-                  </StackPane>
-                  <StackPane layoutX="45.0" layoutY="180.0" prefHeight="150.0" prefWidth="200.0">
-                     <children>
-                              <ImageView fx:id="imagemOriginal" fitHeight="220.0" fitWidth="233.0" preserveRatio="true" />
-                     </children>
-                  </StackPane>
+                        <!-- Container que expande com o painel e centraliza tudo -->
+                        <StackPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <padding><Insets bottom="10" left="10" right="10" top="10" /></padding>
+                            <children>
+                                <VBox alignment="CENTER" spacing="16">
+                                    <Label alignment="TOP_CENTER" contentDisplay="TOP" text="Input">
+                                        <font>
+                                            <Font size="20.0" />
+                                        </font>
+                                        <VBox.margin>
+                                            <Insets />
+                                        </VBox.margin>
+                                    </Label>
+                                    <!-- Área da imagem centralizada -->
+                                    <StackPane fx:id="inputImageContainer" maxHeight="Infinity" maxWidth="Infinity" minHeight="200">
+                                        <children>
+                                            <ImageView fx:id="imagemOriginal" pickOnBounds="true" preserveRatio="true">
+                                                <StackPane.margin>
+                                                    <Insets />
+                                                </StackPane.margin></ImageView>
+                                        </children>
+                                        <VBox.margin>
+                                            <Insets />
+                                        </VBox.margin>
+                                    </StackPane>
+                                </VBox>
+                            </children>
+                        </StackPane>
                     </children>
                 </AnchorPane>
+
+                <!-- Área direita (Output) -->
+                <AnchorPane fx:id="outputPane" minWidth="0.0">
+                    <children>
+                        <StackPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <padding><Insets bottom="10" left="10" right="10" top="10" /></padding>
+                            <children>
+                                <VBox alignment="CENTER" spacing="16">
+                                    <Label text="Output">
+                                        <font><Font size="20.0" /></font>
+                                    </Label>
+                                    <StackPane fx:id="outputImageContainer" disable="true" maxHeight="Infinity" maxWidth="Infinity" minHeight="200">
+                                        <children>
+                                            <ImageView fx:id="imagemAlterada" pickOnBounds="true" preserveRatio="true" />
+                                        </children>
+                                    </StackPane>
+                                </VBox>
+                            </children>
+                        </StackPane>
+                    </children>
+                </AnchorPane>
+
             </items>
         </SplitPane>
     </children>
