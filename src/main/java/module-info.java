@@ -6,6 +6,7 @@ module com.editor.editor {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires javafx.base;
+    requires java.desktop;
 
     opens com.editor.editor to javafx.fxml;
     exports com.editor.editor;
