@@ -43,7 +43,6 @@ public class Transformacoes {
         // Atualiza a imagem alterada
         imagemAlterada.setImage(novaImagem);
     }
-
     public void rotacionarImagem(int angulo, ImageView imagemOriginal, ImageView imagemAlterada){
         if (imagemOriginal == null || imagemOriginal.getImage() == null) {
             errorHandling();
@@ -165,4 +164,91 @@ public class Transformacoes {
 
         imagemAlterada.setImage(novaImagem);
     }
+
+    public void aumentar(ImageView imagemOriginal, ImageView imagemAlterada) {
+
+        if (imagemOriginal == null || imagemOriginal.getImage() == null) {
+            errorHandling();
+            return;
+        }
+        double INCREMENTO = 1.1;
+        Image imagem = imagemOriginal.getImage();
+        int largura = (int) imagem.getWidth();
+        int altura = (int) imagem.getHeight();
+
+        PixelReader pixelReader = imagem.getPixelReader();
+
+        // Calcula dimensões da nova imagem usando incremento
+        int novaLargura = (int) (largura * INCREMENTO);
+        int novaAltura = (int) (altura * INCREMENTO);
+
+        WritableImage novaImagem = new WritableImage(novaLargura, novaAltura);
+        PixelWriter pixelWriter = novaImagem.getPixelWriter();
+
+        for (int y = 0; y < novaAltura; y++) {
+            for (int x = 0; x < novaLargura; x++) {
+
+                // Mapeia para pixel da imagem atual
+                int xOriginal = (int) (x / INCREMENTO);
+                int yOriginal = (int) (y / INCREMENTO);
+
+                // Garante que não passe do limite
+                if (xOriginal >= largura) xOriginal = largura - 1;
+                if (yOriginal >= altura) yOriginal = altura - 1;
+
+                // Copia o pixel
+                pixelWriter.setArgb(x, y, pixelReader.getArgb(xOriginal, yOriginal));
+
+            }
+        }
+
+        // Atualiza a ImageView
+        imagemAlterada.setImage(novaImagem);
+        imagemAlterada.setFitWidth(novaImagem.getWidth());
+        imagemAlterada.setFitHeight(novaImagem.getHeight());
+    }
+
+    public void diminuir(ImageView imagemOriginal, ImageView imagemAlterada) {
+        if (imagemOriginal == null || imagemOriginal.getImage() == null) {
+            errorHandling();
+            return;
+        }
+
+        double INCREMENTO = 0.9; // diminui 10%
+        Image imagem = imagemOriginal.getImage();
+        int largura = (int) imagem.getWidth();
+        int altura  = (int) imagem.getHeight();
+
+        PixelReader pixelReader = imagem.getPixelReader();
+
+        // Calcula novas dimensões
+        int novaLargura = (int) (largura * INCREMENTO);
+        int novaAltura  = (int) (altura * INCREMENTO);
+
+        // Garante que não fique com tamanho zero
+        if (novaLargura < 1) novaLargura = 1;
+        if (novaAltura < 1) novaAltura = 1;
+
+        WritableImage novaImagem = new WritableImage(novaLargura, novaAltura);
+        PixelWriter pixelWriter = novaImagem.getPixelWriter();
+
+        for (int y = 0; y < novaAltura; y++) {
+            int yOriginal = (int) (y / INCREMENTO);
+            if (yOriginal >= altura) yOriginal = altura - 1;
+
+            for (int x = 0; x < novaLargura; x++) {
+                int xOriginal = (int) (x / INCREMENTO);
+                if (xOriginal >= largura) xOriginal = largura - 1;
+
+                pixelWriter.setArgb(x, y, pixelReader.getArgb(xOriginal, yOriginal));
+            }
+        }
+
+        // Atualiza a ImageView
+        imagemAlterada.setImage(novaImagem);
+        imagemAlterada.setFitWidth(novaImagem.getWidth());
+        imagemAlterada.setFitHeight(novaImagem.getHeight());
+        imagemAlterada.setPreserveRatio(true);
+    }
+
 }
