@@ -1,13 +1,11 @@
 package com.editor.editor;
 
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.image.*;
 
 public class Transformacoes {
 
-    private void errorHandling() {
+    private void warningHandling() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Aviso!");
         alert.setHeaderText("Nenhuma imagem para ser editada!");
@@ -16,7 +14,7 @@ public class Transformacoes {
 
     public void transladarImagem(int deslocamentoX, int deslocamentoY, ImageView imagemOriginal, ImageView imagemAlterada) {
         if (imagemOriginal == null || imagemOriginal.getImage() == null) {
-            errorHandling();
+            warningHandling();
             return;
         }
 
@@ -47,7 +45,7 @@ public class Transformacoes {
 
     public void rotacionarImagem(int angulo, ImageView imagemOriginal, ImageView imagemAlterada){
         if (imagemOriginal == null || imagemOriginal.getImage() == null) {
-            errorHandling();
+            warningHandling();
             return;
         }
 
@@ -96,7 +94,7 @@ public class Transformacoes {
 
     public void espelharHorizontal(ImageView imagemOriginal, ImageView imagemAlterada) {
         if (imagemOriginal == null || imagemOriginal.getImage() == null) {
-            errorHandling();
+            warningHandling();
             return;
         }
 
@@ -133,7 +131,7 @@ public class Transformacoes {
 
     public void espelharVertical(ImageView imagemOriginal, ImageView imagemAlterada) {
         if (imagemOriginal == null || imagemOriginal.getImage() == null) {
-            errorHandling();
+            warningHandling();
             return;
         }
 
@@ -169,9 +167,8 @@ public class Transformacoes {
     }
 
     public void aumentar(ImageView imagemOriginal, ImageView imagemAlterada) {
-
         if (imagemOriginal == null || imagemOriginal.getImage() == null) {
-            errorHandling();
+            warningHandling();
             return;
         }
         double INCREMENTO = 1.1;
@@ -201,7 +198,6 @@ public class Transformacoes {
 
                 // Copia o pixel
                 pixelWriter.setArgb(x, y, pixelReader.getArgb(xOriginal, yOriginal));
-
             }
         }
 
@@ -213,7 +209,7 @@ public class Transformacoes {
 
     public void diminuir(ImageView imagemOriginal, ImageView imagemAlterada) {
         if (imagemOriginal == null || imagemOriginal.getImage() == null) {
-            errorHandling();
+            warningHandling();
             return;
         }
 

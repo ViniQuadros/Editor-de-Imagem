@@ -8,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.embed.swing.SwingFXUtils;
@@ -23,16 +22,11 @@ public class Controller {
 
     // Classes de Efeito
     private final Transformacoes transformacoes = new Transformacoes();
+    private final Filtros filtros = new Filtros();
 
     // SplitPane
     @FXML
     private SplitPane splitPane;
-
-    // Anchors
-    @FXML
-    private AnchorPane inputPane;
-    @FXML
-    private AnchorPane outputPane;
 
     // StackPanes
     @FXML
@@ -50,16 +44,6 @@ public class Controller {
     Stack<Image> ultimaImagem = new Stack<>();
     private Image imagemAnterior;
     private Image refazerImagem;
-
-    // Menus do Topo
-    @FXML
-    private MenuItem abrirImagemMenu;
-    @FXML
-    private MenuItem sairMenu;
-    @FXML
-    private MenuItem resetarPosicaoMenu;
-    @FXML
-    private MenuItem sobreMenu;
 
     // Inputs de Efeito na Imagem
     @FXML
@@ -157,7 +141,10 @@ public class Controller {
                 alert.setHeaderText("Imagem salva em " + file.getAbsolutePath());
                 alert.showAndWait();
             } catch (Exception e) {
-                e.printStackTrace();
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Erro");
+                errorAlert.setHeaderText("Erro: " +  e.getMessage());
+                errorAlert.showAndWait();
             }
         }
     }
@@ -208,7 +195,7 @@ public class Controller {
     void sobre(ActionEvent event) {
         Alert sobrePrograma = new Alert(Alert.AlertType.CONFIRMATION);
         sobrePrograma.setTitle("Sobre o Programa");
-        sobrePrograma.setHeaderText("Editor de Imagens \nProjeto de PDI");
+        sobrePrograma.setHeaderText("Editor de Imagens\nProjeto de PDI\nAutores: Lucas Michaelsen, Lucas Santos e Vinícius de Quadros");
         sobrePrograma.showAndWait();
     }
 
@@ -252,5 +239,11 @@ public class Controller {
     void diminuir(ActionEvent event) {
         ultimaImagem.push(imagemAlterada.getImage());
         transformacoes.diminuir(imagemAlterada,imagemAlterada);
+    }
+
+    @FXML
+    void greyscale(ActionEvent event) {
+        ultimaImagem.push(imagemAlterada.getImage());
+        filtros.greyscaleImagem(imagemOriginal, imagemAlterada);
     }
 }

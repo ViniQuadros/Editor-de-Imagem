@@ -41,11 +41,6 @@
                         <MenuItem fx:id="resetarPosicaoMenu" onAction="#resetarPosicao" text="Resetar Posição" />
                     </items>
                 </Menu>
-                <Menu text="Sobre">
-                    <items>
-                        <MenuItem fx:id="sobreMenu" onAction="#sobre" text="Sobre o Programa" />
-                    </items>
-                </Menu>
             <Menu text="Temas">
                <items>
                   <MenuItem onAction="#setLightTheme" text="Light" />
@@ -111,7 +106,7 @@
                                                 <Label text="100%" />
                                             </HBox>
                                             <Button text="Contraste" />
-                                            <Button text="GreyScale" />
+                                            <Button fx:id="greyscaleBtn" onAction="#greyscale" text="Greyscale" />
                                             <Button text="Passa Alta" />
                                             <Button text="Passa Baixa" />
                                             <Button text="Threshold" />
