@@ -8,6 +8,7 @@ module com.editor.editor {
     requires javafx.base;
     requires java.desktop;
     requires javafx.swing;
+    requires atlantafx.base;
 
     opens com.editor.editor to javafx.fxml;
     exports com.editor.editor;

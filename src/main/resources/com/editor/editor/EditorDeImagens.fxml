@@ -48,8 +48,8 @@
                 </Menu>
             <Menu text="Temas">
                <items>
-                  <MenuItem text="Light" />
-                  <MenuItem text="Dark" />
+                  <MenuItem onAction="#setLightTheme" text="Light" />
+                  <MenuItem onAction="#setDarkTheme" text="Dark" />
                </items>
             </Menu>
             <Menu text="Sobre">

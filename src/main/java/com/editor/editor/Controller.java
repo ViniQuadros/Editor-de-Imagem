@@ -1,5 +1,7 @@
 package com.editor.editor;
 
+import atlantafx.base.theme.PrimerDark;
+import atlantafx.base.theme.PrimerLight;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,6 +19,8 @@ import java.util.Objects;
 import java.util.Stack;
 
 public class Controller {
+    private boolean isLightTheme = false;
+
     // Classes de Efeito
     private final Transformacoes transformacoes = new Transformacoes();
 
@@ -76,6 +80,8 @@ public class Controller {
     // Inicialização
     @FXML
     public void initialize() {
+        Application.setUserAgentStylesheet(new PrimerDark().getUserAgentStylesheet());
+
         try{
             Image lena = new Image(Objects.requireNonNull(getClass().getResource("/images/Lena.jpeg")).toExternalForm());
             imagemOriginal.setImage(lena);
@@ -91,15 +97,6 @@ public class Controller {
 
         // Output (sem bind, só preserva proporção)
         imagemAlterada.setPreserveRatio(true);
-//         // Input
-//         imagemOriginal.fitWidthProperty().bind(inputPane.widthProperty());
-//         imagemOriginal.fitHeightProperty().bind(inputPane.heightProperty());
-//         imagemOriginal.setPreserveRatio(true);
-//
-//         // Output
-//         imagemAlterada.fitWidthProperty().bind(outputPane.widthProperty());
-//         imagemAlterada.fitHeightProperty().bind(outputPane.heightProperty());
-//         imagemAlterada.setPreserveRatio(true);
     }
 
     // Funções do Menu do Topo
@@ -192,6 +189,22 @@ public class Controller {
     }
 
     @FXML
+    void setDarkTheme(ActionEvent event) {
+        if(isLightTheme){
+            Application.setUserAgentStylesheet(new PrimerDark().getUserAgentStylesheet());
+            isLightTheme = false;
+        }
+    }
+
+    @FXML
+    void setLightTheme(ActionEvent event) {
+        if (!isLightTheme) {
+            Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet());
+            isLightTheme = true;
+        }
+    }
+
+    @FXML
     void sobre(ActionEvent event) {
         Alert sobrePrograma = new Alert(Alert.AlertType.CONFIRMATION);
         sobrePrograma.setTitle("Sobre o Programa");
@@ -231,11 +244,13 @@ public class Controller {
 
     @FXML
     void aumentar(ActionEvent event) {
+        ultimaImagem.push(imagemAlterada.getImage());
         transformacoes.aumentar(imagemAlterada, imagemAlterada);
     }
 
     @FXML
     void diminuir(ActionEvent event) {
+        ultimaImagem.push(imagemAlterada.getImage());
         transformacoes.diminuir(imagemAlterada,imagemAlterada);
     }
 }

@@ -6,6 +6,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.image.*;
 
 public class Transformacoes {
+
     private void errorHandling() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Aviso!");
@@ -43,6 +44,7 @@ public class Transformacoes {
         // Atualiza a imagem alterada
         imagemAlterada.setImage(novaImagem);
     }
+
     public void rotacionarImagem(int angulo, ImageView imagemOriginal, ImageView imagemAlterada){
         if (imagemOriginal == null || imagemOriginal.getImage() == null) {
             errorHandling();
@@ -91,6 +93,7 @@ public class Transformacoes {
         // Atualiza a imagem alterada
         imagemAlterada.setImage(novaImagem);
     }
+
     public void espelharHorizontal(ImageView imagemOriginal, ImageView imagemAlterada) {
         if (imagemOriginal == null || imagemOriginal.getImage() == null) {
             errorHandling();
@@ -250,5 +253,4 @@ public class Transformacoes {
         imagemAlterada.setFitHeight(novaImagem.getHeight());
         imagemAlterada.setPreserveRatio(true);
     }
-
 }
