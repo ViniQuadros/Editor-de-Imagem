@@ -89,11 +89,8 @@ public class Controller {
         imagemOriginal.fitHeightProperty().bind(inputImageContainer.heightProperty());
         imagemOriginal.setPreserveRatio(true);
 
-        // Output
-        imagemAlterada.fitWidthProperty().bind(outputImageContainer.widthProperty());
-        imagemAlterada.fitHeightProperty().bind(outputImageContainer.heightProperty());
+        // Output (sem bind, só preserva proporção)
         imagemAlterada.setPreserveRatio(true);
-
 //         // Input
 //         imagemOriginal.fitWidthProperty().bind(inputPane.widthProperty());
 //         imagemOriginal.fitHeightProperty().bind(inputPane.heightProperty());
@@ -234,11 +231,11 @@ public class Controller {
 
     @FXML
     void aumentar(ActionEvent event) {
-        System.out.println("Aumentar chamado");
+        transformacoes.aumentar(imagemAlterada, imagemAlterada);
     }
 
     @FXML
     void diminuir(ActionEvent event) {
-        System.out.println("Diminuir chamado");
+        transformacoes.diminuir(imagemAlterada,imagemAlterada);
     }
 }
