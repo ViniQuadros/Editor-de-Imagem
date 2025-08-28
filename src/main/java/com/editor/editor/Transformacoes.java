@@ -4,7 +4,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.image.*;
 
 public class Transformacoes {
-
     private void warningHandling() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Aviso!");
