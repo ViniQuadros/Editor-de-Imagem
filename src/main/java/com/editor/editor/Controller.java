@@ -53,7 +53,12 @@ public class Controller {
     @FXML
     private TextField valorAngulo;
 
+    @FXML
+    private TextField valorThreshold;
+
     // Botões de Efeito na Imagem
+    @FXML
+    private Button greyscaleBtn;
 
     // Transformações
     @FXML
@@ -241,9 +246,38 @@ public class Controller {
         transformacoes.diminuir(imagemAlterada,imagemAlterada);
     }
 
+    //Funções de Filtro
+    private boolean isGreyscale = false;
     @FXML
     void greyscale(ActionEvent event) {
         ultimaImagem.push(imagemAlterada.getImage());
         filtros.greyscaleImagem(imagemOriginal, imagemAlterada);
+        if(!isGreyscale){
+            isGreyscale = true;
+            if (!isLightTheme){
+                greyscaleBtn.setStyle("-fx-background-color: #015801;");
+            }
+            else{
+                greyscaleBtn.setStyle("-fx-background-color: #00ff00;");
+            }
+        }
+        else{
+            isGreyscale = false;
+            greyscaleBtn.setStyle("");
+        }
+    }
+
+    @FXML
+    void threshold(ActionEvent event) {
+        int valor = Integer.parseInt(valorThreshold.getText());
+        if (valor < 0){
+            valor = 0;
+            valorThreshold.setText("0");
+        }
+        else if(valor > 255){
+            valor = 255;
+            valorThreshold.setText("255");
+        }
+        filtros.thresholdImage(imagemOriginal, imagemAlterada, valor);
     }
 }

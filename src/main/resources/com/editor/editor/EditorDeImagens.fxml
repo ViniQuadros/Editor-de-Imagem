@@ -69,28 +69,38 @@
                                 <TitledPane text="Transformações">
                                     <content>
                                         <VBox alignment="TOP_CENTER" spacing="8">
-                                            <Button fx:id="transladarBtn" text="Transladar" />
+                                 <Label text="Transladar">
+                                    <font>
+                                       <Font size="16.0" />
+                                    </font>
+                                 </Label>
                                             <HBox alignment="CENTER" spacing="10">
                                                 <Label text="X:" />
-                                                <TextField fx:id="valorTransladarX" onAction="#transladar" prefWidth="60" text="0" />
+                                                <TextField fx:id="valorTransladarX" maxWidth="60.0" onAction="#transladar" text="0" />
                                                 <Label text="Y:" />
-                                                <TextField fx:id="valorTransladarY" onAction="#transladar" prefWidth="60" text="0" />
+                                                <TextField fx:id="valorTransladarY" maxWidth="60.0" onAction="#transladar" text="0" />
                                             </HBox>
-
-                                            <Button text="Rotacionar" />
+                                 <Label text="Rotacionar">
+                                    <font>
+                                       <Font size="16.0" />
+                                    </font>
+                                 </Label>
                                             <HBox alignment="CENTER" spacing="10">
                                                 <Label text="Ângulo:" />
-                                                <TextField fx:id="valorAngulo" onAction="#rotacionar" prefWidth="80" text="0" />
+                                                <TextField fx:id="valorAngulo" maxWidth="60.0" onAction="#rotacionar" text="0" />
                                             </HBox>
-
-                                            <Button fx:id="espelharBtn" text="Espelhar" />
+                                 <Label text="Espelhar">
+                                    <font>
+                                       <Font size="16.0" />
+                                    </font>
+                                 </Label>
                                             <HBox alignment="CENTER" spacing="10">
-                                                <Button fx:id="espelharHBtn" onAction="#espelharHorizontal" text="Horizontal" />
-                                                <Button fx:id="espelharVBtn" onAction="#espelharVertical" text="Vertical" />
+                                                <Button fx:id="espelharHBtn" maxWidth="100.0" minWidth="100.0" onAction="#espelharHorizontal" text="Horizontal" />
+                                                <Button fx:id="espelharVBtn" maxWidth="100.0" minWidth="100.0" onAction="#espelharVertical" text="Vertical" />
                                             </HBox>
 
-                                            <Button fx:id="aumentarBtn" onAction="#aumentar" text="Aumentar" />
-                                            <Button fx:id="diminuirBtn" onAction="#diminuir" text="Diminuir" />
+                                            <Button fx:id="aumentarBtn" maxWidth="100.0" minWidth="100.0" onAction="#aumentar" text="Aumentar" />
+                                            <Button fx:id="diminuirBtn" maxWidth="100.0" minWidth="100.0" onAction="#diminuir" text="Diminuir" />
                                         </VBox>
                                     </content>
                                 </TitledPane>
@@ -99,18 +109,32 @@
                                 <TitledPane text="Filtros">
                                     <content>
                                         <VBox alignment="TOP_CENTER" spacing="8">
-                                            <Button text="Brilho" />
+                                 <Label text="Brilho">
+                                    <font>
+                                       <Font size="16.0" />
+                                    </font>
+                                 </Label>
                                             <HBox alignment="CENTER" spacing="8">
                                                 <Label text="0%" />
                                                 <Slider />
                                                 <Label text="100%" />
                                             </HBox>
-                                            <Button text="Contraste" />
-                                            <Button fx:id="greyscaleBtn" onAction="#greyscale" text="Greyscale" />
-                                            <Button text="Passa Alta" />
-                                            <Button text="Passa Baixa" />
-                                            <Button text="Threshold" />
-                                            <Button text="Afinamento" />
+                                 <Label text="Contraste">
+                                    <font>
+                                       <Font size="16.0" />
+                                    </font>
+                                 </Label>
+                                 <TextField fx:id="valorAngulo1" alignment="CENTER" maxWidth="60.0" onAction="#rotacionar" text="1" />
+                                            <Button fx:id="greyscaleBtn" maxWidth="100.0" minWidth="100.0" onAction="#greyscale" text="Greyscale" />
+                                            <Button maxWidth="100.0" minWidth="100.0" text="Passa Alta" />
+                                            <Button maxWidth="100.0" minWidth="100.0" text="Passa Baixa" />
+                                 <Label text="Threshold">
+                                    <font>
+                                       <Font size="16.0" />
+                                    </font>
+                                 </Label>
+                                 <TextField fx:id="valorThreshold" alignment="CENTER" maxWidth="60.0" onAction="#threshold" text="128" />
+                                            <Button maxHeight="100.0" minWidth="100.0" text="Afinamento" />
                                         </VBox>
                                     </content>
                                 </TitledPane>
@@ -119,10 +143,10 @@
                                 <TitledPane text="Morfologia Matemática">
                                     <content>
                                         <VBox alignment="TOP_CENTER" spacing="8">
-                                            <Button text="Dilatação" />
-                                            <Button text="Erosão" />
-                                            <Button text="Abertura" />
-                                            <Button text="Fechamento" />
+                                            <Button maxWidth="100.0" minWidth="100.0" text="Dilatação" />
+                                            <Button maxWidth="100.0" minWidth="100.0" text="Erosão" />
+                                            <Button maxWidth="100.0" minWidth="100.0" text="Abertura" />
+                                            <Button maxWidth="100.0" minWidth="100.0" text="Fechamento" />
                                         </VBox>
                                     </content>
                                 </TitledPane>
@@ -131,7 +155,7 @@
                                 <TitledPane text="Extração de Características">
                                     <content>
                                         <VBox alignment="TOP_CENTER" spacing="8">
-                                            <Button text="Desafio" />
+                                            <Button maxWidth="100.0" minWidth="100.0" text="Desafio" />
                                         </VBox>
                                     </content>
                                 </TitledPane>

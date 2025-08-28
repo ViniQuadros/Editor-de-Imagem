@@ -54,8 +54,6 @@ public class Transformacoes {
         int altura = (int) imagem.getHeight();
 
         PixelReader pixelReader = imagem.getPixelReader();
-
-        // nova imagem (mesmo tamanho por simplicidade)
         WritableImage novaImagem = new WritableImage(largura, altura);
         PixelWriter pixelWriter = novaImagem.getPixelWriter();
 
@@ -88,7 +86,6 @@ public class Transformacoes {
             }
         }
 
-        // Atualiza a imagem alterada
         imagemAlterada.setImage(novaImagem);
     }
 

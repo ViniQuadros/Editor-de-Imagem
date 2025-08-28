@@ -19,38 +19,73 @@ public class Filtros {
             return;
         }
 
-        Image imagem = imagemOriginal.getImage();
-        int largura = (int) imagem.getWidth();
-        int altura = (int) imagem.getHeight();
+        if (!isGreyscale) {
+            Image imagem = imagemOriginal.getImage();
+            int largura = (int) imagem.getWidth();
+            int altura = (int) imagem.getHeight();
 
-        PixelReader pixelReader = imagem.getPixelReader();
+            PixelReader pixelReader = imagem.getPixelReader();
+            WritableImage novaImagem = new WritableImage(largura, altura);
+            PixelWriter pixelWriter = novaImagem.getPixelWriter();
+
+            for (int y = 0; y < altura; y++) {
+                for (int x = 0; x < largura; x++) {
+                    int argb = pixelReader.getArgb(x, y);
+
+                    int a = (argb >> 24) & 0xFF;
+                    int r = (argb >> 16) & 0xFF;
+                    int g = (argb >> 8) & 0xFF;
+                    int b = argb & 0xFF;
+
+                    int luminosidade = (int) (0.299 * r + 0.587 * g + 0.114 * b);
+                    int novoArgb = (a << 24) | (luminosidade << 16) | (luminosidade << 8) | luminosidade;
+
+                    pixelWriter.setArgb(x, y, novoArgb);
+                }
+            }
+
+            imagemAlterada.setImage(novaImagem);
+            isGreyscale = true;
+
+        } else {
+            imagemAlterada.setImage(imagemOriginal.getImage());
+            isGreyscale = false;
+        }
+    }
+
+    public void thresholdImage(ImageView imagemOriginal, ImageView imagemAlterada, int threshold) {
+        if (imagemOriginal == null || imagemOriginal.getImage() == null) {
+            warningHandling();
+            return;
+        }
+
+        int largura = (int) imagemOriginal.getImage().getWidth();
+        int altura = (int) imagemOriginal.getImage().getHeight();
+
+        PixelReader pixelReader = imagemOriginal.getImage().getPixelReader();
         WritableImage novaImagem = new WritableImage(largura, altura);
         PixelWriter pixelWriter = novaImagem.getPixelWriter();
 
-        // Itera sobre todos os pixels da imagem
         for (int y = 0; y < altura; y++) {
             for (int x = 0; x < largura; x++) {
-                // Lê o valor ARGB do pixel original
                 int argb = pixelReader.getArgb(x, y);
 
-                // Extrai os componentes de cor
                 int a = (argb >> 24) & 0xFF;
                 int r = (argb >> 16) & 0xFF;
                 int g = (argb >> 8) & 0xFF;
                 int b = argb & 0xFF;
 
-                // Calcula a luminosidade (média ponderada) para o novo pixel cinza
+                // Converte para escala de cinza
                 int luminosidade = (int) (0.299 * r + 0.587 * g + 0.114 * b);
 
-                // Cria o novo valor ARGB com os canais R, G e B iguais à luminosidade
-                int novoArgb = (a << 24) | (luminosidade << 16) | (luminosidade << 8) | luminosidade;
+                // Aplica o threshold
+                int cor = (luminosidade >= threshold) ? 255 : 0;
+                int novoArgb = (a << 24) | (cor << 16) | (cor << 8) | cor;
 
-                // Escreve o novo pixel na imagem alterada
                 pixelWriter.setArgb(x, y, novoArgb);
             }
         }
 
-        // Atualiza a ImageView com a nova imagem em escala de cinza
         imagemAlterada.setImage(novaImagem);
     }
 }
