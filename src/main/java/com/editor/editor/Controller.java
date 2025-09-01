@@ -9,10 +9,12 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.embed.swing.SwingFXUtils;
 
 import javax.imageio.ImageIO;
+import javafx.print.PrinterJob;
 import java.io.File;
 import java.util.Objects;
 import java.util.Stack;
@@ -54,6 +56,10 @@ public class Controller {
     private TextField valorAngulo;
 
     // Botões de Efeito na Imagem
+    @FXML
+    private Slider brilhoSlider;   // Slider de brilho
+    @FXML
+    private Slider contrasteSlider; // Slider de contraste
 
     // Transformações
     @FXML
@@ -81,6 +87,9 @@ public class Controller {
 
         // Output (sem bind, só preserva proporção)
         imagemAlterada.setPreserveRatio(true);
+
+        brilhoSlider.setValue(0);
+        contrasteSlider.setValue(0);
     }
 
     // Funções do Menu do Topo
@@ -135,6 +144,7 @@ public class Controller {
                     format = "jpg";
                 }
 
+                assert image != null;
                 ImageIO.write(SwingFXUtils.fromFXImage(image, null), format, file);
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Sucesso");
@@ -192,6 +202,47 @@ public class Controller {
     }
 
     @FXML
+    void imprimir(ActionEvent event) {
+        if (imagemAlterada.getImage() == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Aviso");
+            alert.setHeaderText("Nenhuma imagem para imprimir!");
+            alert.showAndWait();
+            return;
+        }
+
+        // Cria o trabalho de impressão
+        PrinterJob job = PrinterJob.createPrinterJob();
+        if (job == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro");
+            alert.setHeaderText("Nenhuma impressora disponível.");
+            alert.showAndWait();
+            return;
+        }
+
+        // Abre a caixa de diálogo de impressão
+        boolean proceed = job.showPrintDialog(imagemAlterada.getScene().getWindow());
+        if (proceed) {
+            // Imprime o ImageView (com a imagem alterada)
+            boolean success = job.printPage(imagemAlterada);
+            if (success) {
+                job.endJob();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Sucesso");
+                alert.setHeaderText("Imagem enviada para a impressora!");
+                alert.showAndWait();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erro");
+                alert.setHeaderText("Falha ao imprimir a imagem.");
+                alert.showAndWait();
+            }
+        }
+    }
+
+
+    @FXML
     void sobre(ActionEvent event) {
         Alert sobrePrograma = new Alert(Alert.AlertType.CONFIRMATION);
         sobrePrograma.setTitle("Sobre o Programa");
@@ -246,4 +297,19 @@ public class Controller {
         ultimaImagem.push(imagemAlterada.getImage());
         filtros.greyscaleImagem(imagemOriginal, imagemAlterada);
     }
+
+    @FXML
+    void aplicarBrilho(MouseEvent event) {
+        ultimaImagem.push(imagemAlterada.getImage()); // salva antes de aplicar
+        double valor = brilhoSlider.getValue(); // pega o valor do slider
+        filtros.aumentarBrilho(imagemAlterada, imagemAlterada, valor);
+    }
+
+    @FXML
+    void aplicarContraste(MouseEvent event) {
+        ultimaImagem.push(imagemAlterada.getImage());
+        double valor = contrasteSlider.getValue();
+        filtros.aumentarContraste(imagemAlterada, imagemAlterada, valor);
+    }
+
 }

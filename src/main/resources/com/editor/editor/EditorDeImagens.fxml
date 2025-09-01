@@ -47,6 +47,11 @@
                   <MenuItem onAction="#setDarkTheme" text="Dark" />
                </items>
             </Menu>
+                <Menu text="Imprimir">
+                    <items>
+                        <MenuItem fx:id="imprimirMenu" onAction="#imprimir" text="Imprimir Imagem" />
+                    </items>
+                </Menu>
             <Menu text="Sobre">
                <items>
                   <MenuItem fx:id="sobreMenu11" onAction="#sobre" text="Sobre o Programa" />
@@ -102,10 +107,19 @@
                                             <Button text="Brilho" />
                                             <HBox alignment="CENTER" spacing="8">
                                                 <Label text="0%" />
-                                                <Slider />
                                                 <Label text="100%" />
+                                                <Slider fx:id="brilhoSlider" min="0" max="100" value="0"
+                                                        onMouseDragged="#aplicarBrilho"
+                                                        onMouseReleased="#aplicarBrilho"/>
                                             </HBox>
                                             <Button text="Contraste" />
+                                            <HBox alignment="CENTER" spacing="8">
+                                                <Label text="0%" />
+                                                <Label text="100%" />
+                                                <Slider fx:id="contrasteSlider" min="0" max="100" value="0"
+                                                        onMouseDragged="#aplicarContraste"
+                                                        onMouseReleased="#aplicarContraste"/>
+                                            </HBox>
                                             <Button fx:id="greyscaleBtn" onAction="#greyscale" text="Greyscale" />
                                             <Button text="Passa Alta" />
                                             <Button text="Passa Baixa" />
