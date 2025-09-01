@@ -87,9 +87,6 @@ public class Controller {
 
         // Output (sem bind, só preserva proporção)
         imagemAlterada.setPreserveRatio(true);
-
-        brilhoSlider.setValue(0);
-        contrasteSlider.setValue(0);
     }
 
     // Funções do Menu do Topo
@@ -312,4 +309,6 @@ public class Controller {
         filtros.aumentarContraste(imagemAlterada, imagemAlterada, valor);
     }
 
+    public void threshold(ActionEvent actionEvent) {
+    }
 }
