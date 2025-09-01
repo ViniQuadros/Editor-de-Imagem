@@ -197,6 +197,11 @@ public class Controller {
     }
 
     @FXML
+    void imprimir(ActionEvent event) {
+
+    }
+
+    @FXML
     void sobre(ActionEvent event) {
         Alert sobrePrograma = new Alert(Alert.AlertType.CONFIRMATION);
         sobrePrograma.setTitle("Sobre o Programa");

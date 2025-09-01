@@ -47,9 +47,14 @@
                   <MenuItem onAction="#setDarkTheme" text="Dark" />
                </items>
             </Menu>
+            <Menu text="Imprimir">
+               <items>
+                  <MenuItem fx:id="imprimirBtn" onAction="#imprimir" text="Imprimir" />
+               </items>
+            </Menu>
             <Menu text="Sobre">
                <items>
-                  <MenuItem fx:id="sobreMenu11" onAction="#sobre" text="Sobre o Programa" />
+                  <MenuItem fx:id="sobreMenu111" onAction="#sobre" text="Sobre o Programa" />
                </items>
             </Menu>
             </menus>
@@ -115,8 +120,8 @@
                                     </font>
                                  </Label>
                                             <HBox alignment="CENTER" spacing="8">
-                                                <Label text="0%" />
-                                                <Slider />
+                                                <Label text="-100%" />
+                                                <Slider blockIncrement="1.0" min="-100.0" />
                                                 <Label text="100%" />
                                             </HBox>
                                  <Label text="Contraste">
