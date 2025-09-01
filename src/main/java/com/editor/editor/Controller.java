@@ -5,6 +5,7 @@ import atlantafx.base.theme.PrimerLight;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.print.PrinterJob;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -198,7 +199,42 @@ public class Controller {
 
     @FXML
     void imprimir(ActionEvent event) {
+        if (imagemAlterada.getImage() == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Aviso");
+            alert.setHeaderText("Nenhuma imagem para imprimir!");
+            alert.showAndWait();
+            return;
+        }
 
+        // Cria o trabalho de impressão
+        PrinterJob job = PrinterJob.createPrinterJob();
+        if (job == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro");
+            alert.setHeaderText("Nenhuma impressora disponível.");
+            alert.showAndWait();
+            return;
+        }
+
+        // Abre a caixa de diálogo de impressão
+        boolean proceed = job.showPrintDialog(imagemAlterada.getScene().getWindow());
+        if (proceed) {
+            // Imprime o ImageView (com a imagem alterada)
+            boolean success = job.printPage(imagemAlterada);
+            if (success) {
+                job.endJob();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Sucesso");
+                alert.setHeaderText("Imagem enviada para a impressora!");
+                alert.showAndWait();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erro");
+                alert.setHeaderText("Falha ao imprimir a imagem.");
+                alert.showAndWait();
+            }
+        }
     }
 
     @FXML
