@@ -64,6 +64,8 @@ public class Controller {
     private Image imagemBase;
     @FXML
     private Slider sliderBrilho;
+    @FXML
+    private TextField valorContraste;
 
     // Transformações
     @FXML
@@ -328,6 +330,7 @@ public class Controller {
         int valor = Integer.parseInt(valorThreshold.getText());
         if (valor < 0){
             valor = 0;
+            alerta("Digite um número válido para threshold!");
             valorThreshold.setText("0");
         }
         else if(valor > 255){
@@ -337,5 +340,38 @@ public class Controller {
         filtros.thresholdImage(imagemOriginal, imagemAlterada, valor);
     }
 
+    @FXML
+    void contrastre(ActionEvent event) {
+        try {
+            if (Integer.parseInt(valorContraste.getText()) < 0) {
+                alerta("Digite um número válido para contraste!");
+                valorContraste.setText("1");
+                ultimaImagem.push(imagemAlterada.getImage());
+            }
+            else {
+                double contraste = Double.parseDouble(valorContraste.getText());
+
+                filtros.contrasteImagem(imagemOriginal, imagemAlterada, contraste);
+            }
+        } catch (NumberFormatException e) {
+            alerta(null);
+        }
+    }
+
+
+    public void alerta(String mensagem) {
+        if (mensagem == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Entrada inválida");
+            alert.setHeaderText("Erro");
+            alert.showAndWait();
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Entrada inválida");
+            alert.setHeaderText(mensagem);
+            alert.showAndWait();
+        }
+    }
 
 }

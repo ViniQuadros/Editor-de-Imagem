@@ -129,7 +129,7 @@
                                        <Font size="16.0" />
                                     </font>
                                  </Label>
-                                 <TextField fx:id="valorAngulo1" alignment="CENTER" maxWidth="60.0" onAction="#rotacionar" text="1" />
+                                 <TextField fx:id="valorContraste" alignment="CENTER" maxWidth="60.0" onAction="#contrastre" text="1" />
                                             <Button fx:id="greyscaleBtn" maxWidth="100.0" minWidth="100.0" onAction="#greyscale" text="Greyscale" />
                                             <Button maxWidth="100.0" minWidth="100.0" text="Passa Alta" />
                                             <Button maxWidth="100.0" minWidth="100.0" text="Passa Baixa" />
