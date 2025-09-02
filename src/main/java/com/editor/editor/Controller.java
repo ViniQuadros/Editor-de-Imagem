@@ -338,4 +338,18 @@ public class Controller {
     }
 
 
+    public void carregarImagemDeLink(String url) {
+        try {
+            Image image = new Image(url, true); // true = carrega de forma assíncrona
+            imagemOriginal.setImage(image);
+            imagemAlterada.setImage(image);
+            imagemBase = image;
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Erro ao carregar imagem");
+            alert.setHeaderText("Não foi possível carregar a imagem do link.");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
+    }
 }
