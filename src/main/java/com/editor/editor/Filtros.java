@@ -116,6 +116,37 @@ public class Filtros {
         imagemView.setImage(novaImagem);
     }
 
+    public void contrasteImagem(ImageView imagemOriginal, ImageView imagemAlterada, double C) {
+        if (imagemOriginal.getImage() == null) return;
+
+        Image image = imagemOriginal.getImage();
+        int width = (int) image.getWidth();
+        int height = (int) image.getHeight();
+
+        WritableImage output = new WritableImage(width, height);
+        PixelReader reader = image.getPixelReader();
+        PixelWriter writer = output.getPixelWriter();
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                Color cor = reader.getColor(x, y);
+
+                double r = (cor.getRed() - 0.5) * C + 0.5;
+                double g = (cor.getGreen() - 0.5) * C + 0.5;
+                double b = (cor.getBlue() - 0.5) * C + 0.5;
+
+                // clamp
+                r = Math.min(1.0, Math.max(0.0, r));
+                g = Math.min(1.0, Math.max(0.0, g));
+                b = Math.min(1.0, Math.max(0.0, b));
+
+                writer.setColor(x, y, new Color(r, g, b, cor.getOpacity()));
+            }
+        }
+
+        imagemAlterada.setImage(output);
+    }
+
 
 
 }
