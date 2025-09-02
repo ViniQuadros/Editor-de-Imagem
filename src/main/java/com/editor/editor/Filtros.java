@@ -2,6 +2,7 @@ package com.editor.editor;
 
 import javafx.scene.control.Alert;
 import javafx.scene.image.*;
+import javafx.scene.paint.Color;
 
 public class Filtros {
     private boolean isGreyscale = false;
@@ -88,4 +89,35 @@ public class Filtros {
 
         imagemAlterada.setImage(novaImagem);
     }
+
+
+    public void ajustarBrilho(ImageView imagemView, Image base, double sliderValue) {
+        if (base == null) return;
+
+        double brilhoFator = sliderValue / 100.0;
+
+        int width = (int) base.getWidth();
+        int height = (int) base.getHeight();
+
+        WritableImage novaImagem = new WritableImage(width, height);
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                Color cor = base.getPixelReader().getColor(x, y);
+
+                double r = Math.min(Math.max(cor.getRed() + brilhoFator, 0), 1);
+                double g = Math.min(Math.max(cor.getGreen() + brilhoFator, 0), 1);
+                double b = Math.min(Math.max(cor.getBlue() + brilhoFator, 0), 1);
+
+                novaImagem.getPixelWriter().setColor(x, y, new Color(r, g, b, cor.getOpacity()));
+            }
+        }
+
+        imagemView.setImage(novaImagem);
+    }
+
+
+
 }
+
+

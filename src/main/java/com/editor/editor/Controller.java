@@ -57,15 +57,20 @@ public class Controller {
     @FXML
     private TextField valorThreshold;
 
-    // Botões de Efeito na Imagem
+    // Filtros
     @FXML
     private Button greyscaleBtn;
+
+    private Image imagemBase;
+    @FXML
+    private Slider sliderBrilho;
 
     // Transformações
     @FXML
     private Button transladarBtn;
     @FXML
     private Button espelharBtn;
+
 
     // Inicialização
     @FXML
@@ -76,6 +81,7 @@ public class Controller {
             Image lena = new Image(Objects.requireNonNull(getClass().getResource("/images/Lena.jpeg")).toExternalForm());
             imagemOriginal.setImage(lena);
             imagemAlterada.setImage(lena);
+            imagemBase = lena;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -87,6 +93,15 @@ public class Controller {
 
         // Output (sem bind, só preserva proporção)
         imagemAlterada.setPreserveRatio(true);
+
+
+        sliderBrilho.valueProperty().addListener((obs, oldVal, newVal) -> {
+            if (imagemBase != null) {
+                ultimaImagem.push(imagemAlterada.getImage()); // registro para desfazer
+                filtros.ajustarBrilho(imagemAlterada, imagemBase, newVal.doubleValue());
+            }
+        });
+
     }
 
     // Funções do Menu do Topo
@@ -321,4 +336,6 @@ public class Controller {
         }
         filtros.thresholdImage(imagemOriginal, imagemAlterada, valor);
     }
+
+
 }
