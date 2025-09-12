@@ -16,6 +16,8 @@ public class Application extends javafx.application.Application {
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("EditorDeImagens.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 900, 600);
         Controller controller = fxmlLoader.getController();
+
+        //Define inputs do teclado
         scene.setOnKeyPressed(event -> {
             if (event.isControlDown() && event.getCode() == KeyCode.Z) {
                 controller.desfazer(new ActionEvent());
@@ -23,10 +25,10 @@ public class Application extends javafx.application.Application {
                 controller.carregarImagemDeLink("https://i.pinimg.com/736x/c1/59/0d/c1590d1e874e60a2c53365d63585c1eb.jpg");
             }
         });
+
         stage.setTitle("Visualise");
         stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/vizualize.png")));
         stage.setScene(scene);
         stage.show();
-
     }
 }

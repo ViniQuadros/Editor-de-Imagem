@@ -7,6 +7,10 @@ import javafx.scene.paint.Color;
 public class Filtros {
     private boolean isGreyscale = false;
 
+    public boolean getIsGreyscale(){
+        return isGreyscale;
+    }
+
     private void warningHandling() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Aviso!");
@@ -29,6 +33,7 @@ public class Filtros {
             WritableImage novaImagem = new WritableImage(largura, altura);
             PixelWriter pixelWriter = novaImagem.getPixelWriter();
 
+            //Modifica a cor dos pixels da imagem
             for (int y = 0; y < altura; y++) {
                 for (int x = 0; x < largura; x++) {
                     int argb = pixelReader.getArgb(x, y);
@@ -71,6 +76,7 @@ public class Filtros {
             for (int x = 0; x < largura; x++) {
                 int argb = pixelReader.getArgb(x, y);
 
+                //Definição dos novos valores RGBA da imagem
                 int a = (argb >> 24) & 0xFF;
                 int r = (argb >> 16) & 0xFF;
                 int g = (argb >> 8) & 0xFF;
@@ -109,6 +115,7 @@ public class Filtros {
                 double g = Math.min(Math.max(cor.getGreen() + brilhoFator, 0), 1);
                 double b = Math.min(Math.max(cor.getBlue() + brilhoFator, 0), 1);
 
+                //Ajusta o brilho com base no valor inserido
                 novaImagem.getPixelWriter().setColor(x, y, new Color(r, g, b, cor.getOpacity()));
             }
         }
@@ -135,20 +142,16 @@ public class Filtros {
                 double g = (cor.getGreen() - 0.5) * C + 0.5;
                 double b = (cor.getBlue() - 0.5) * C + 0.5;
 
-                // clamp
+                // Limita os valores
                 r = Math.min(1.0, Math.max(0.0, r));
                 g = Math.min(1.0, Math.max(0.0, g));
                 b = Math.min(1.0, Math.max(0.0, b));
 
+                //Aplica o contraste
                 writer.setColor(x, y, new Color(r, g, b, cor.getOpacity()));
             }
         }
 
         imagemAlterada.setImage(output);
     }
-
-
-
 }
-
-

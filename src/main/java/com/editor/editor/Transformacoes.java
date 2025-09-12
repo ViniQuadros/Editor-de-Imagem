@@ -31,7 +31,7 @@ public class Transformacoes {
                 int novoX = x + deslocamentoX;
                 int novoY = y + deslocamentoY;
 
-                // só escreve se o pixel estiver dentro dos limites
+                // Só escreve se o pixel estiver dentro dos limites
                 if (novoX >= 0 && novoX < largura && novoY >= 0 && novoY < altura) {
                     pixelWriter.setArgb(novoX, novoY, pixelReader.getArgb(x, y));
                 }
@@ -56,30 +56,30 @@ public class Transformacoes {
         WritableImage novaImagem = new WritableImage(largura, altura);
         PixelWriter pixelWriter = novaImagem.getPixelWriter();
 
-        // centro da imagem
+        // Centro da imagem
         double cx = largura / 2.0;
         double cy = altura / 2.0;
 
-        // ângulo em radianos
+        // Ângulo em radianos
         double rad = Math.toRadians(angulo);
         double cos = Math.cos(rad);
         double sin = Math.sin(rad);
 
-        // percorre os pixels da nova imagem
+        // Percorre os pixels da nova imagem
         for (int y = 0; y < altura; y++) {
             for (int x = 0; x < largura; x++) {
-                // aplica a rotação inversa para pegar o pixel da imagem original
+                // Aplica a rotação inversa para pegar o pixel da imagem original
                 double xOriginal = cos * (x - cx) + sin * (y - cy) + cx;
                 double yOriginal = -sin * (x - cx) + cos * (y - cy) + cy;
 
                 int ix = (int) Math.round(xOriginal);
                 int iy = (int) Math.round(yOriginal);
 
-                // verifica se está dentro dos limites
+                // Verifica se está dentro dos limites
                 if (ix >= 0 && ix < largura && iy >= 0 && iy < altura) {
                     pixelWriter.setArgb(x, y, pixelReader.getArgb(ix, iy));
                 } else {
-                    // se não tiver pixel correspondente, deixa transparente
+                    // Se não tiver pixel correspondente, deixa transparente
                     pixelWriter.setArgb(x, y, 0x00000000);
                 }
             }
@@ -107,7 +107,7 @@ public class Transformacoes {
 
         for (int y = 0; y < altura; y++) {
             for (int x = 0; x < largura; x++) {
-                // aplica espelhamento horizontal (inverte X em relação ao centro)
+                // Aplica espelhamento horizontal (inverte X em relação ao centro)
                 double xOriginal = -1 * (x - cx) + cx;
                 double yOriginal = (y - cy) + cy;
 
@@ -144,7 +144,7 @@ public class Transformacoes {
 
         for (int y = 0; y < altura; y++) {
             for (int x = 0; x < largura; x++) {
-                // aplica espelhamento vertical (inverte Y em relação ao centro)
+                // Aplica espelhamento vertical (inverte Y em relação ao centro)
                 double xOriginal = (x - cx) + cx;
                 double yOriginal = -1 * (y - cy) + cy;
 

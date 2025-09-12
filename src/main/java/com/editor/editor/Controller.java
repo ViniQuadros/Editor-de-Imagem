@@ -21,7 +21,7 @@ import java.util.Stack;
 public class Controller {
     private boolean isLightTheme = false;
 
-    // Classes de Efeito
+    // Classes de alteração da imagem
     private final Transformacoes transformacoes = new Transformacoes();
     private final Filtros filtros = new Filtros();
 
@@ -73,12 +73,12 @@ public class Controller {
     @FXML
     private Button espelharBtn;
 
-
-    // Inicialização
+    // Inicialização do FXML
     @FXML
     public void initialize() {
         Application.setUserAgentStylesheet(new PrimerDark().getUserAgentStylesheet());
 
+        //Define Lena como a imagem inicial
         try{
             Image lena = new Image(Objects.requireNonNull(getClass().getResource("/images/Lena.jpeg")).toExternalForm());
             imagemOriginal.setImage(lena);
@@ -88,14 +88,13 @@ public class Controller {
             throw new RuntimeException(e);
         }
 
-        // Input
+        // Imagem Input
         imagemOriginal.fitWidthProperty().bind(inputImageContainer.widthProperty());
         imagemOriginal.fitHeightProperty().bind(inputImageContainer.heightProperty());
         imagemOriginal.setPreserveRatio(true);
 
-        // Output (sem bind, só preserva proporção)
+        // Imagem Output (sem bind, só preserva proporção)
         imagemAlterada.setPreserveRatio(true);
-
 
         sliderBrilho.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (imagemBase != null) {
@@ -103,7 +102,6 @@ public class Controller {
                 filtros.ajustarBrilho(imagemAlterada, imagemBase, newVal.doubleValue());
             }
         });
-
     }
 
     // Funções do Menu do Topo
@@ -134,10 +132,7 @@ public class Controller {
     void salvarImagem(ActionEvent event) {
         Image image = imagemAlterada.getImage();
         if (image == null) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Aviso");
-            alert.setHeaderText("Nenhuma imagem para ser salva!");
-            alert.showAndWait();
+            alerta("Nenhuma imagem para ser salva!");
         }
 
         // Configura o seletor
@@ -164,14 +159,12 @@ public class Controller {
                 alert.setHeaderText("Imagem salva em " + file.getAbsolutePath());
                 alert.showAndWait();
             } catch (Exception e) {
-                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-                errorAlert.setTitle("Erro");
-                errorAlert.setHeaderText("Erro: " +  e.getMessage());
-                errorAlert.showAndWait();
+                alerta("Erro: " + e.getMessage());
             }
         }
     }
 
+    //Fecha o programa
     @FXML
     void sair(ActionEvent event) {
         Platform.exit();
@@ -193,6 +186,7 @@ public class Controller {
         }
     }
 
+    //Reseta a posição das imagens na tela
     @FXML
     void resetarPosicao(ActionEvent event) {
         splitPane.setDividerPositions(0.3, 0.65);
@@ -217,11 +211,7 @@ public class Controller {
     @FXML
     void imprimir(ActionEvent event) {
         if (imagemAlterada.getImage() == null) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Aviso");
-            alert.setHeaderText("Nenhuma imagem para imprimir!");
-            alert.showAndWait();
-            return;
+            alerta("Nenhuma imagem para imprimir!");
         }
 
         // Cria o trabalho de impressão
@@ -246,10 +236,7 @@ public class Controller {
                 alert.setHeaderText("Imagem enviada para a impressora!");
                 alert.showAndWait();
             } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Erro");
-                alert.setHeaderText("Falha ao imprimir a imagem.");
-                alert.showAndWait();
+                alerta("Falha ao imprimir a imagem.");
             }
         }
     }
@@ -305,13 +292,11 @@ public class Controller {
     }
 
     //Funções de Filtro
-    private boolean isGreyscale = false;
     @FXML
     void greyscale(ActionEvent event) {
         ultimaImagem.push(imagemAlterada.getImage());
         filtros.greyscaleImagem(imagemOriginal, imagemAlterada);
-        if(!isGreyscale){
-            isGreyscale = true;
+        if(filtros.getIsGreyscale()){
             if (!isLightTheme){
                 greyscaleBtn.setStyle("-fx-background-color: #015801;");
             }
@@ -320,7 +305,6 @@ public class Controller {
             }
         }
         else{
-            isGreyscale = false;
             greyscaleBtn.setStyle("");
         }
     }
@@ -358,8 +342,19 @@ public class Controller {
         }
     }
 
+    //Permite carregar a imagem utilizando links externos
+    public void carregarImagemDeLink(String url) {
+        try {
+            Image image = new Image(url, true); // true = carrega de forma assíncrona
+            imagemOriginal.setImage(image);
+            imagemAlterada.setImage(image);
+            imagemBase = image;
+        } catch (Exception e) {
+            alerta("Não foi possível carregar a imagem do link.");
+        }
+    }
 
-    public void alerta(String mensagem) {
+    private void alerta(String mensagem) {
         if (mensagem == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Entrada inválida");
@@ -370,21 +365,6 @@ public class Controller {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Entrada inválida");
             alert.setHeaderText(mensagem);
-            alert.showAndWait();
-        }
-    }
-
-    public void carregarImagemDeLink(String url) {
-        try {
-            Image image = new Image(url, true); // true = carrega de forma assíncrona
-            imagemOriginal.setImage(image);
-            imagemAlterada.setImage(image);
-            imagemBase = image;
-        } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erro ao carregar imagem");
-            alert.setHeaderText("Não foi possível carregar a imagem do link.");
-            alert.setContentText(e.getMessage());
             alert.showAndWait();
         }
     }
