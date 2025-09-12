@@ -67,12 +67,6 @@ public class Controller {
     @FXML
     private TextField valorContraste;
 
-    // Transformações
-    @FXML
-    private Button transladarBtn;
-    @FXML
-    private Button espelharBtn;
-
     // Inicialização do FXML
     @FXML
     public void initialize() {
@@ -99,7 +93,7 @@ public class Controller {
         sliderBrilho.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (imagemBase != null) {
                 ultimaImagem.push(imagemAlterada.getImage()); // registro para desfazer
-                filtros.ajustarBrilho(imagemAlterada, imagemBase, newVal.doubleValue());
+                filtros.ajustarBrilho(imagemOriginal, imagemAlterada, newVal.doubleValue());
             }
         });
     }

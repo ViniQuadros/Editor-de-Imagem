@@ -4,55 +4,35 @@ import javafx.scene.control.Alert;
 import javafx.scene.image.*;
 import javafx.scene.paint.Color;
 
-public class Filtros {
+public class Filtros extends ModificacoesImagens{
     private boolean isGreyscale = false;
 
     public boolean getIsGreyscale(){
         return isGreyscale;
     }
 
-    private void warningHandling() {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Aviso!");
-        alert.setHeaderText("Nenhuma imagem para ser editada!");
-        alert.showAndWait();
-    }
-
     public void greyscaleImagem(ImageView imagemOriginal, ImageView imagemAlterada) {
-        if (imagemOriginal == null || imagemOriginal.getImage() == null) {
-            warningHandling();
-            return;
-        }
-
         if (!isGreyscale) {
-            Image imagem = imagemOriginal.getImage();
-            int largura = (int) imagem.getWidth();
-            int altura = (int) imagem.getHeight();
+            processarImagem(imagemOriginal, imagemAlterada, (reader, writer, largura, altura) -> {
+                //Modifica a cor dos pixels da imagem
+                for (int y = 0; y < altura; y++) {
+                    for (int x = 0; x < largura; x++) {
+                        int argb = reader.getArgb(x, y);
 
-            PixelReader pixelReader = imagem.getPixelReader();
-            WritableImage novaImagem = new WritableImage(largura, altura);
-            PixelWriter pixelWriter = novaImagem.getPixelWriter();
+                        int a = (argb >> 24) & 0xFF;
+                        int r = (argb >> 16) & 0xFF;
+                        int g = (argb >> 8) & 0xFF;
+                        int b = argb & 0xFF;
 
-            //Modifica a cor dos pixels da imagem
-            for (int y = 0; y < altura; y++) {
-                for (int x = 0; x < largura; x++) {
-                    int argb = pixelReader.getArgb(x, y);
+                        int luminosidade = (int) (0.299 * r + 0.587 * g + 0.114 * b);
+                        int novoArgb = (a << 24) | (luminosidade << 16) | (luminosidade << 8) | luminosidade;
 
-                    int a = (argb >> 24) & 0xFF;
-                    int r = (argb >> 16) & 0xFF;
-                    int g = (argb >> 8) & 0xFF;
-                    int b = argb & 0xFF;
-
-                    int luminosidade = (int) (0.299 * r + 0.587 * g + 0.114 * b);
-                    int novoArgb = (a << 24) | (luminosidade << 16) | (luminosidade << 8) | luminosidade;
-
-                    pixelWriter.setArgb(x, y, novoArgb);
+                        writer.setArgb(x, y, novoArgb);
+                    }
                 }
-            }
 
-            imagemAlterada.setImage(novaImagem);
-            isGreyscale = true;
-
+                isGreyscale = true;
+            });
         } else {
             imagemAlterada.setImage(imagemOriginal.getImage());
             isGreyscale = false;
@@ -60,98 +40,68 @@ public class Filtros {
     }
 
     public void thresholdImage(ImageView imagemOriginal, ImageView imagemAlterada, int threshold) {
-        if (imagemOriginal == null || imagemOriginal.getImage() == null) {
-            warningHandling();
-            return;
-        }
+        processarImagem(imagemOriginal, imagemAlterada, (reader, writer, largura, altura) -> {
+            for (int y = 0; y < altura; y++) {
+                for (int x = 0; x < largura; x++) {
+                    int argb = reader.getArgb(x, y);
 
-        int largura = (int) imagemOriginal.getImage().getWidth();
-        int altura = (int) imagemOriginal.getImage().getHeight();
+                    //Definição dos novos valores RGBA da imagem
+                    int a = (argb >> 24) & 0xFF;
+                    int r = (argb >> 16) & 0xFF;
+                    int g = (argb >> 8) & 0xFF;
+                    int b = argb & 0xFF;
 
-        PixelReader pixelReader = imagemOriginal.getImage().getPixelReader();
-        WritableImage novaImagem = new WritableImage(largura, altura);
-        PixelWriter pixelWriter = novaImagem.getPixelWriter();
+                    // Converte para escala de cinza
+                    int luminosidade = (int) (0.299 * r + 0.587 * g + 0.114 * b);
 
-        for (int y = 0; y < altura; y++) {
-            for (int x = 0; x < largura; x++) {
-                int argb = pixelReader.getArgb(x, y);
+                    // Aplica o threshold
+                    int cor = (luminosidade >= threshold) ? 255 : 0;
+                    int novoArgb = (a << 24) | (cor << 16) | (cor << 8) | cor;
 
-                //Definição dos novos valores RGBA da imagem
-                int a = (argb >> 24) & 0xFF;
-                int r = (argb >> 16) & 0xFF;
-                int g = (argb >> 8) & 0xFF;
-                int b = argb & 0xFF;
-
-                // Converte para escala de cinza
-                int luminosidade = (int) (0.299 * r + 0.587 * g + 0.114 * b);
-
-                // Aplica o threshold
-                int cor = (luminosidade >= threshold) ? 255 : 0;
-                int novoArgb = (a << 24) | (cor << 16) | (cor << 8) | cor;
-
-                pixelWriter.setArgb(x, y, novoArgb);
+                    writer.setArgb(x, y, novoArgb);
+                }
             }
-        }
-
-        imagemAlterada.setImage(novaImagem);
+        });
     }
 
-
-    public void ajustarBrilho(ImageView imagemView, Image base, double sliderValue) {
-        if (base == null) return;
-
+    public void ajustarBrilho(ImageView imagemOriginal, ImageView imagemAlterada, double sliderValue) {
+        // Converte o sliderValue em um fator de brilho entre -1 e 1
         double brilhoFator = sliderValue / 100.0;
 
-        int width = (int) base.getWidth();
-        int height = (int) base.getHeight();
+        processarImagem(imagemOriginal, imagemAlterada, (reader, writer, largura, altura) -> {
+            for (int y = 0; y < altura; y++) {
+                for (int x = 0; x < largura; x++) {
+                    Color cor = reader.getColor(x, y);
 
-        WritableImage novaImagem = new WritableImage(width, height);
+                    double r = Math.min(Math.max(cor.getRed() + brilhoFator, 0), 1);
+                    double g = Math.min(Math.max(cor.getGreen() + brilhoFator, 0), 1);
+                    double b = Math.min(Math.max(cor.getBlue() + brilhoFator, 0), 1);
 
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                Color cor = base.getPixelReader().getColor(x, y);
-
-                double r = Math.min(Math.max(cor.getRed() + brilhoFator, 0), 1);
-                double g = Math.min(Math.max(cor.getGreen() + brilhoFator, 0), 1);
-                double b = Math.min(Math.max(cor.getBlue() + brilhoFator, 0), 1);
-
-                //Ajusta o brilho com base no valor inserido
-                novaImagem.getPixelWriter().setColor(x, y, new Color(r, g, b, cor.getOpacity()));
+                    writer.setColor(x, y, new Color(r, g, b, cor.getOpacity()));
+                }
             }
-        }
-
-        imagemView.setImage(novaImagem);
+        });
     }
 
     public void contrasteImagem(ImageView imagemOriginal, ImageView imagemAlterada, double C) {
-        if (imagemOriginal.getImage() == null) return;
+        processarImagem(imagemOriginal, imagemAlterada, (reader, writer, largura, altura) -> {
+            for (int y = 0; y < altura; y++) {
+                for (int x = 0; x < largura; x++) {
+                    Color cor = reader.getColor(x, y);
 
-        Image image = imagemOriginal.getImage();
-        int width = (int) image.getWidth();
-        int height = (int) image.getHeight();
+                    double r = (cor.getRed() - 0.5) * C + 0.5;
+                    double g = (cor.getGreen() - 0.5) * C + 0.5;
+                    double b = (cor.getBlue() - 0.5) * C + 0.5;
 
-        WritableImage output = new WritableImage(width, height);
-        PixelReader reader = image.getPixelReader();
-        PixelWriter writer = output.getPixelWriter();
+                    // Limita os valores
+                    r = Math.min(1.0, Math.max(0.0, r));
+                    g = Math.min(1.0, Math.max(0.0, g));
+                    b = Math.min(1.0, Math.max(0.0, b));
 
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                Color cor = reader.getColor(x, y);
-
-                double r = (cor.getRed() - 0.5) * C + 0.5;
-                double g = (cor.getGreen() - 0.5) * C + 0.5;
-                double b = (cor.getBlue() - 0.5) * C + 0.5;
-
-                // Limita os valores
-                r = Math.min(1.0, Math.max(0.0, r));
-                g = Math.min(1.0, Math.max(0.0, g));
-                b = Math.min(1.0, Math.max(0.0, b));
-
-                //Aplica o contraste
-                writer.setColor(x, y, new Color(r, g, b, cor.getOpacity()));
+                    //Aplica o contraste
+                    writer.setColor(x, y, new Color(r, g, b, cor.getOpacity()));
+                }
             }
-        }
-
-        imagemAlterada.setImage(output);
+        });
     }
 }

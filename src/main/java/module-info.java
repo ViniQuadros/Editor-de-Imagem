@@ -9,6 +9,7 @@ module com.editor.editor {
     requires java.desktop;
     requires javafx.swing;
     requires atlantafx.base;
+    requires javafx.graphics;
 
     opens com.editor.editor to javafx.fxml;
     exports com.editor.editor;
