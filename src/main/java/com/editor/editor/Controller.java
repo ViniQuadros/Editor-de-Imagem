@@ -336,6 +336,16 @@ public class Controller {
         }
     }
 
+    @FXML
+    void mediana(ActionEvent event) {
+
+    }
+
+    @FXML
+    void gaussiano(ActionEvent event) {
+
+    }
+
     //Permite carregar a imagem utilizando links externos
     public void carregarImagemDeLink(String url) {
         try {

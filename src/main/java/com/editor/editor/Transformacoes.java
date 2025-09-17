@@ -1,9 +1,7 @@
 package com.editor.editor;
-
-import javafx.scene.control.Alert;
 import javafx.scene.image.*;
 
-public class Transformacoes extends ModificacoesImagens{
+public class Transformacoes extends ModificacoesImagens {
     public void transladarImagem(int deslocamentoX, int deslocamentoY, ImageView imagemOriginal, ImageView imagemAlterada) {
         processarImagem(imagemOriginal, imagemAlterada, (reader, writer, largura, altura) -> {
             //Percorre os pixels para alterar o deslocamento

@@ -136,8 +136,28 @@
                                  </Label>
                                  <TextField fx:id="valorContraste" alignment="CENTER" maxWidth="60.0" onAction="#contrastre" text="1" />
                                             <Button fx:id="greyscaleBtn" maxWidth="100.0" minWidth="100.0" onAction="#greyscale" text="Greyscale" />
-                                            <Button maxWidth="100.0" minWidth="100.0" text="Passa Alta" />
-                                            <Button maxWidth="100.0" minWidth="100.0" text="Passa Baixa" />
+                                 <Label text="Passa Baixa">
+                                    <font>
+                                       <Font size="16.0" />
+                                    </font>
+                                 </Label>
+                                 <HBox alignment="CENTER" spacing="8">
+                                    <children>
+                                                  <Button fx:id="medianaBtn" maxWidth="100.0" minWidth="100.0" onAction="#mediana" text="Mediana" />
+                                       <Button fx:id="gaussianoBtn" maxWidth="100.0" minWidth="100.0" onAction="#gaussiano" text="Gaussiano" />
+                                    </children>
+                                 </HBox>
+                                 <Label text="Passa Alta">
+                                    <font>
+                                       <Font size="16.0" />
+                                    </font>
+                                 </Label>
+                                 <HBox alignment="CENTER" spacing="8">
+                                    <children>
+                                       <Button maxWidth="100.0" minWidth="100.0" text="Método 1" />
+                                       <Button maxWidth="100.0" minWidth="100.0" text="Método 2" />
+                                    </children>
+                                 </HBox>
                                  <Label text="Threshold">
                                     <font>
                                        <Font size="16.0" />

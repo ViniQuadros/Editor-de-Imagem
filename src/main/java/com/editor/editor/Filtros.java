@@ -1,6 +1,5 @@
 package com.editor.editor;
 
-import javafx.scene.control.Alert;
 import javafx.scene.image.*;
 import javafx.scene.paint.Color;
 

@@ -7,7 +7,6 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
-
 import java.io.IOException;
 
 public class Application extends javafx.application.Application {
