@@ -301,6 +301,7 @@ public class Controller {
         else{
             greyscaleBtn.setStyle("");
         }
+
     }
 
     @FXML
@@ -346,6 +347,17 @@ public class Controller {
 
     }
 
+    @FXML
+    public void passaAltaSobel(ActionEvent event){
+        ultimaImagem.push(imagemAlterada.getImage());
+        filtros.PASobel(imagemOriginal, imagemAlterada);
+    }
+    @FXML
+    public void passaAltaRoberts(ActionEvent event){
+        ultimaImagem.push(imagemAlterada.getImage());
+        filtros.PARoberts(imagemOriginal, imagemAlterada);
+    }
+
     //Permite carregar a imagem utilizando links externos
     public void carregarImagemDeLink(String url) {
         try {
@@ -372,4 +384,5 @@ public class Controller {
             alert.showAndWait();
         }
     }
+
 }
