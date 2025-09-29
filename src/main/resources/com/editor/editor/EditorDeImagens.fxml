@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
@@ -19,7 +25,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fillWidth="true" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.editor.editor.Controller">
+<VBox fillWidth="true" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.editor.editor.Controller">
 
     <children>
         <!-- Barra de menu fixa no topo -->
@@ -73,38 +79,46 @@
                                 <TitledPane text="Transformações">
                                     <content>
                                         <VBox alignment="TOP_CENTER" spacing="8">
-                                 <Label text="Transladar">
-                                    <font>
-                                       <Font size="16.0" />
-                                    </font>
-                                 </Label>
-                                            <HBox alignment="CENTER" spacing="10">
-                                                <Label text="X:" />
-                                                <TextField fx:id="valorTransladarX" maxWidth="60.0" onAction="#transladar" text="0" />
-                                                <Label text="Y:" />
-                                                <TextField fx:id="valorTransladarY" maxWidth="60.0" onAction="#transladar" text="0" />
-                                            </HBox>
-                                 <Label text="Rotacionar">
-                                    <font>
-                                       <Font size="16.0" />
-                                    </font>
-                                 </Label>
-                                            <HBox alignment="CENTER" spacing="10">
-                                                <Label text="Ângulo:" />
-                                                <TextField fx:id="valorAngulo" maxWidth="60.0" onAction="#rotacionar" text="0" />
-                                            </HBox>
-                                 <Label text="Espelhar">
-                                    <font>
-                                       <Font size="16.0" />
-                                    </font>
-                                 </Label>
-                                            <HBox alignment="CENTER" spacing="10">
-                                                <Button fx:id="espelharHBtn" maxWidth="100.0" minWidth="100.0" onAction="#espelharHorizontal" text="Horizontal" />
-                                                <Button fx:id="espelharVBtn" maxWidth="100.0" minWidth="100.0" onAction="#espelharVertical" text="Vertical" />
-                                            </HBox>
-
-                                            <Button fx:id="aumentarBtn" maxWidth="100.0" minWidth="100.0" onAction="#aumentar" text="Aumentar" />
-                                            <Button fx:id="diminuirBtn" maxWidth="100.0" minWidth="100.0" onAction="#diminuir" text="Diminuir" />
+                                           <children>
+                                    <Label text="Transladar">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                               <HBox alignment="CENTER" spacing="10">
+                                                  <children>
+                                                      <Label text="X:" />
+                                                      <TextField fx:id="valorTransladarX" maxWidth="60.0" onAction="#transladar" text="0" />
+                                                      <Label text="Y:" />
+                                                      <TextField fx:id="valorTransladarY" maxWidth="60.0" onAction="#transladar" text="0" />
+                                                  </children>
+                                               </HBox>
+                                    <Label text="Rotacionar">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                               <HBox alignment="CENTER" spacing="10">
+                                                  <children>
+                                                      <Label text="Ângulo:" />
+                                                      <TextField fx:id="valorAngulo" maxWidth="60.0" onAction="#rotacionar" text="0" />
+                                                  </children>
+                                               </HBox>
+                                    <Label text="Espelhar">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                               <HBox alignment="CENTER" spacing="10">
+                                                  <children>
+                                                      <Button fx:id="espelharHBtn" maxWidth="100.0" minWidth="100.0" onAction="#espelharHorizontal" text="Horizontal" />
+                                                      <Button fx:id="espelharVBtn" maxWidth="100.0" minWidth="100.0" onAction="#espelharVertical" text="Vertical" />
+                                                  </children>
+                                               </HBox>
+   
+                                               <Button fx:id="aumentarBtn" maxWidth="100.0" minWidth="100.0" onAction="#aumentar" text="Aumentar" />
+                                               <Button fx:id="diminuirBtn" maxWidth="100.0" minWidth="100.0" onAction="#diminuir" text="Diminuir" />
+                                           </children>
                                         </VBox>
                                     </content>
                                 </TitledPane>
@@ -113,58 +127,64 @@
                                 <TitledPane text="Filtros">
                                     <content>
                                         <VBox alignment="TOP_CENTER" spacing="8">
-                                 <Label text="Brilho">
-                                    <font>
-                                       <Font size="16.0" />
-                                    </font>
-                                 </Label>
-                                            <HBox alignment="CENTER" spacing="8">
-                                                <Label text="-100%">
+                                           <children>
+                                    <Label text="Brilho">
                                        <font>
-                                          <Font size="11.0" />
-                                       </font></Label>
-                                                <Slider fx:id="sliderBrilho" blockIncrement="1.0" min="-100.0" />
-                                                <Label text="100%">
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                               <HBox alignment="CENTER" spacing="8">
+                                                  <children>
+                                                      <Label text="-100%">
+                                             <font>
+                                                <Font size="11.0" />
+                                             </font>
+                                          </Label>
+                                                      <Slider fx:id="sliderBrilho" blockIncrement="1.0" min="-100.0" />
+                                                      <Label text="100%">
+                                             <font>
+                                                <Font size="11.0" />
+                                             </font>
+                                          </Label>
+                                                  </children>
+                                               </HBox>
+                                    <Label text="Contraste">
                                        <font>
-                                          <Font size="11.0" />
-                                       </font></Label>
-                                            </HBox>
-                                 <Label text="Contraste">
-                                    <font>
-                                       <Font size="16.0" />
-                                    </font>
-                                 </Label>
-                                 <TextField fx:id="valorContraste" alignment="CENTER" maxWidth="60.0" onAction="#contrastre" text="1" />
-                                            <Button fx:id="greyscaleBtn" maxWidth="100.0" minWidth="100.0" onAction="#greyscale" text="Greyscale" />
-                                 <Label text="Passa Baixa">
-                                    <font>
-                                       <Font size="16.0" />
-                                    </font>
-                                 </Label>
-                                 <HBox alignment="CENTER" spacing="8">
-                                    <children>
-                                                  <Button fx:id="medianaBtn" maxWidth="100.0" minWidth="100.0" onAction="#mediana" text="Mediana" />
-                                       <Button fx:id="gaussianoBtn" maxWidth="100.0" minWidth="100.0" onAction="#gaussiano" text="Gaussiano" />
-                                    </children>
-                                 </HBox>
-                                 <Label text="Passa Alta">
-                                    <font>
-                                       <Font size="16.0" />
-                                    </font>
-                                 </Label>
-                                 <HBox alignment="CENTER" spacing="8">
-                                    <children>
-                                       <Button maxWidth="100.0" minWidth="100.0" text="Método 1" />
-                                       <Button maxWidth="100.0" minWidth="100.0" text="Método 2" />
-                                    </children>
-                                 </HBox>
-                                 <Label text="Threshold">
-                                    <font>
-                                       <Font size="16.0" />
-                                    </font>
-                                 </Label>
-                                 <TextField fx:id="valorThreshold" alignment="CENTER" maxWidth="60.0" onAction="#threshold" text="128" />
-                                            <Button maxHeight="100.0" minWidth="100.0" text="Afinamento" />
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="valorContraste" alignment="CENTER" maxWidth="60.0" onAction="#contrastre" text="1" />
+                                               <Button fx:id="greyscaleBtn" maxWidth="100.0" minWidth="100.0" onAction="#greyscale" text="Greyscale" />
+                                    <Label text="Passa Baixa">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <HBox alignment="CENTER" spacing="8">
+                                       <children>
+                                                     <Button fx:id="medianaBtn" maxWidth="100.0" minWidth="100.0" onAction="#mediana" text="Mediana" />
+                                          <Button fx:id="gaussianoBtn" maxWidth="100.0" minWidth="100.0" onAction="#gaussiano" text="Gaussiano" />
+                                       </children>
+                                    </HBox>
+                                    <Label text="Passa Alta">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <HBox alignment="CENTER" spacing="8">
+                                       <children>
+                                          <Button fx:id="passaAltaRoberts" maxWidth="100.0" minWidth="100.0" onAction="#passaAltaRoberts" text="Roberts" />
+                                          <Button fx:id="passaAltaSobel" maxWidth="100.0" minWidth="100.0" onAction="#passaAltaSobel" text="Sobel" />
+                                       </children>
+                                    </HBox>
+                                    <Label text="Threshold">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="valorThreshold" alignment="CENTER" maxWidth="60.0" onAction="#threshold" text="128" />
+                                               <Button maxHeight="100.0" minWidth="100.0" text="Afinamento" />
+                                           </children>
                                         </VBox>
                                     </content>
                                 </TitledPane>
@@ -173,10 +193,12 @@
                                 <TitledPane text="Morfologia Matemática">
                                     <content>
                                         <VBox alignment="TOP_CENTER" spacing="8">
-                                            <Button maxWidth="100.0" minWidth="100.0" text="Dilatação" />
-                                            <Button maxWidth="100.0" minWidth="100.0" text="Erosão" />
-                                            <Button maxWidth="100.0" minWidth="100.0" text="Abertura" />
-                                            <Button maxWidth="100.0" minWidth="100.0" text="Fechamento" />
+                                           <children>
+                                               <Button maxWidth="100.0" minWidth="100.0" text="Dilatação" />
+                                               <Button maxWidth="100.0" minWidth="100.0" text="Erosão" />
+                                               <Button maxWidth="100.0" minWidth="100.0" text="Abertura" />
+                                               <Button maxWidth="100.0" minWidth="100.0" text="Fechamento" />
+                                           </children>
                                         </VBox>
                                     </content>
                                 </TitledPane>
@@ -185,7 +207,9 @@
                                 <TitledPane text="Extração de Características">
                                     <content>
                                         <VBox alignment="TOP_CENTER" spacing="8">
-                                            <Button maxWidth="100.0" minWidth="100.0" text="Desafio" />
+                                           <children>
+                                               <Button maxWidth="100.0" minWidth="100.0" text="Desafio" />
+                                           </children>
                                         </VBox>
                                     </content>
                                 </TitledPane>
@@ -203,26 +227,29 @@
                             <padding><Insets bottom="10" left="10" right="10" top="10" /></padding>
                             <children>
                                 <VBox alignment="CENTER" spacing="16">
-                                    <Label alignment="TOP_CENTER" contentDisplay="TOP" text="Input">
-                                        <font>
-                                            <Font size="20.0" />
-                                        </font>
-                                        <VBox.margin>
-                                            <Insets />
-                                        </VBox.margin>
-                                    </Label>
-                                    <!-- Área da imagem centralizada -->
-                                    <StackPane fx:id="inputImageContainer" maxHeight="Infinity" maxWidth="Infinity" minHeight="200">
-                                        <children>
-                                            <ImageView fx:id="imagemOriginal" pickOnBounds="true" preserveRatio="true">
-                                                <StackPane.margin>
-                                                    <Insets />
-                                                </StackPane.margin></ImageView>
-                                        </children>
-                                        <VBox.margin>
-                                            <Insets />
-                                        </VBox.margin>
-                                    </StackPane>
+                                   <children>
+                                       <Label alignment="TOP_CENTER" contentDisplay="TOP" text="Input">
+                                           <font>
+                                               <Font size="20.0" />
+                                           </font>
+                                           <VBox.margin>
+                                               <Insets />
+                                           </VBox.margin>
+                                       </Label>
+                                       <!-- Área da imagem centralizada -->
+                                       <StackPane fx:id="inputImageContainer" maxHeight="Infinity" maxWidth="Infinity" minHeight="200">
+                                           <children>
+                                               <ImageView fx:id="imagemOriginal" pickOnBounds="true" preserveRatio="true">
+                                                   <StackPane.margin>
+                                                       <Insets />
+                                                   </StackPane.margin>
+                                    </ImageView>
+                                           </children>
+                                           <VBox.margin>
+                                               <Insets />
+                                           </VBox.margin>
+                                       </StackPane>
+                                   </children>
                                 </VBox>
                             </children>
                         </StackPane>
@@ -236,14 +263,18 @@
                             <padding><Insets bottom="10" left="10" right="10" top="10" /></padding>
                             <children>
                                 <VBox alignment="CENTER" spacing="16">
-                                    <Label text="Output">
-                                        <font><Font size="20.0" /></font>
-                                    </Label>
-                                    <StackPane fx:id="outputImageContainer" disable="true" maxHeight="Infinity" maxWidth="Infinity" minHeight="200">
-                                        <children>
-                                            <ImageView fx:id="imagemAlterada" pickOnBounds="true" preserveRatio="true" />
-                                        </children>
-                                    </StackPane>
+                                   <children>
+                                       <Label text="Output">
+                                           <font>
+                                    <Font size="20.0" />
+                                 </font>
+                                       </Label>
+                                       <StackPane fx:id="outputImageContainer" disable="true" maxHeight="Infinity" maxWidth="Infinity" minHeight="200">
+                                           <children>
+                                               <ImageView fx:id="imagemAlterada" pickOnBounds="true" preserveRatio="true" />
+                                           </children>
+                                       </StackPane>
+                                   </children>
                                 </VBox>
                             </children>
                         </StackPane>
