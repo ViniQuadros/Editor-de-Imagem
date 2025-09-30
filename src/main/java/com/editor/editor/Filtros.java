@@ -3,6 +3,7 @@ package com.editor.editor;
 import javafx.scene.image.*;
 import javafx.scene.paint.Color;
 
+import java.util.Arrays;
 
 
 public class Filtros extends ModificacoesImagens{
@@ -203,6 +204,124 @@ public class Filtros extends ModificacoesImagens{
             }
         });
 
+    }
+
+    public void PBMediana(ImageView imagemOriginal, ImageView imagemAlterada) {
+        processarImagem(imagemOriginal, imagemAlterada, (reader, writer, largura, altura) -> {
+            int tamanhoMascara = 3;
+            int offset = tamanhoMascara / 2; // Offset de 1 para máscara 3x3
+
+            // Arrays para armazenar os valores de R, G e B da vizinhança
+            int[] rVizinhanca = new int[tamanhoMascara * tamanhoMascara];
+            int[] gVizinhanca = new int[tamanhoMascara * tamanhoMascara];
+            int[] bVizinhanca = new int[tamanhoMascara * tamanhoMascara];
+
+            // Varre a imagem, ignorando a borda de 1 pixel (onde a máscara 3x3 não pode ser centrada)
+            for (int y = offset; y < altura - offset; y++) {
+                for (int x = offset; x < largura - offset; x++) {
+                    int k = 0; // Índice do array da vizinhança
+
+                    // Coleta os valores R, G e B da vizinhança 3x3
+                    for (int j = -offset; j <= offset; j++) {
+                        for (int i = -offset; i <= offset; i++) {
+                            int argbVizinho = reader.getArgb(x + i, y + j);
+
+                            rVizinhanca[k] = (argbVizinho >> 16) & 0xFF;
+                            gVizinhanca[k] = (argbVizinho >> 8) & 0xFF;
+                            bVizinhanca[k] = argbVizinho & 0xFF;
+                            k++;
+                        }
+                    }
+
+                    // 1. ORDENAÇÃO: Ordena os arrays de R, G e B
+                    // Este é o passo mais custoso e fundamental do filtro da Mediana.
+                    Arrays.sort(rVizinhanca);
+                    Arrays.sort(gVizinhanca);
+                    Arrays.sort(bVizinhanca);
+
+                    // 2. OBTENÇÃO DA MEDIANA: A mediana é o valor central do array ordenado
+                    // O índice central para um array de 9 elementos (3x3) é 4 (índices de 0 a 8)
+                    int medianaR = rVizinhanca[4];
+                    int medianaG = gVizinhanca[4];
+                    int medianaB = bVizinhanca[4];
+
+                    // Mantém o canal Alfa (opacidade) do pixel original
+                    int argbOriginal = reader.getArgb(x, y);
+                    int a = (argbOriginal >> 24) & 0xFF;
+
+                    // Cria o novo valor ARGB com as medianas dos canais
+                    int novoArgb = (a << 24) | (medianaR << 16) | (medianaG << 8) | medianaB;
+
+                    // Aplica o novo pixel
+                    writer.setArgb(x, y, novoArgb);
+                }
+            }
+        });
+    }
+
+    public void PBGaussiano(ImageView imagemOriginal, ImageView imagemAlterada) {
+
+        // Máscara Gaussiana 3x3 e o divisor (soma dos pesos = 16)
+        final int[][] mascara = {
+                {1, 2, 1},
+                {2, 4, 2},
+                {1, 2, 1}
+        };
+        final int divisor = 16;
+        final int tamanhoMascara = 3;
+        final int offset = tamanhoMascara / 2; // Offset de 1 para máscara 3x3
+
+        processarImagem(imagemOriginal, imagemAlterada, (reader, writer, largura, altura) -> {
+
+            // Varre a imagem, ignorando a borda de 1 pixel (onde a máscara 3x3 não pode ser centrada)
+            for (int y = offset; y < altura - offset; y++) {
+                for (int x = offset; x < largura - offset; x++) {
+
+                    // Acumuladores para as somas ponderadas de cada canal de cor
+                    long somaR = 0;
+                    long somaG = 0;
+                    long somaB = 0;
+
+                    // Itera sobre a máscara 3x3
+                    for (int j = -offset; j <= offset; j++) {
+                        for (int i = -offset; i <= offset; i++) {
+
+                            // Obtém o valor ARGB do vizinho
+                            int argbVizinho = reader.getArgb(x + i, y + j);
+
+                            // Extrai os componentes de cor do vizinho
+                            int r = (argbVizinho >> 16) & 0xFF;
+                            int g = (argbVizinho >> 8) & 0xFF;
+                            int b = argbVizinho & 0xFF;
+
+                            // Determina o peso da máscara para esta posição
+                            int peso = mascara[j + offset][i + offset];
+
+                            // Adiciona o valor ponderado à soma
+                            somaR += r * peso;
+                            somaG += g * peso;
+                            somaB += b * peso;
+                        }
+                    }
+
+                    // Calcula o novo valor do pixel dividindo a soma ponderada pelo divisor
+                    // O Math.min(255, ...) garante que o valor não ultrapasse 255 (Byte.MAX_VALUE)
+                    int novoR = (int) Math.min(255, somaR / divisor);
+                    int novoG = (int) Math.min(255, somaG / divisor);
+                    int novoB = (int) Math.min(255, somaB / divisor);
+
+                    // Mantém o canal Alfa (opacidade) do pixel original
+                    int argbOriginal = reader.getArgb(x, y);
+                    int a = (argbOriginal >> 24) & 0xFF;
+
+                    // Cria o novo valor ARGB
+                    int novoArgb = (a << 24) | (novoR << 16) | (novoG << 8) | novoB;
+
+                    // Aplica o novo pixel
+                    writer.setArgb(x, y, novoArgb);
+                }
+            }
+        });
     }
 
 }

@@ -339,12 +339,14 @@ public class Controller {
 
     @FXML
     void mediana(ActionEvent event) {
-
+        ultimaImagem.push(imagemAlterada.getImage());
+        filtros.PBMediana(imagemOriginal, imagemAlterada);
     }
 
     @FXML
     void gaussiano(ActionEvent event) {
-
+        ultimaImagem.push(imagemAlterada.getImage());
+        filtros.PBGaussiano(imagemOriginal, imagemAlterada);
     }
 
     @FXML
