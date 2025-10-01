@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.util.Duration;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -24,6 +25,7 @@ public class Controller {
     // Classes de alteração da imagem
     private final Transformacoes transformacoes = new Transformacoes();
     private final Filtros filtros = new Filtros();
+    private final MorfologiaMatematica morfologiaMatematica = new MorfologiaMatematica();
 
     // SplitPane
     @FXML
@@ -64,6 +66,7 @@ public class Controller {
     private Image imagemBase;
     @FXML
     private Slider sliderBrilho;
+    private Tooltip tooltip;
     @FXML
     private TextField valorContraste;
 
@@ -73,7 +76,7 @@ public class Controller {
         Application.setUserAgentStylesheet(new PrimerDark().getUserAgentStylesheet());
 
         //Define Lena como a imagem inicial
-        try{
+        try {
             Image lena = new Image(Objects.requireNonNull(getClass().getResource("/images/Lena.jpeg")).toExternalForm());
             imagemOriginal.setImage(lena);
             imagemAlterada.setImage(lena);
@@ -90,10 +93,17 @@ public class Controller {
         // Imagem Output (sem bind, só preserva proporção)
         imagemAlterada.setPreserveRatio(true);
 
+        tooltip = new Tooltip(String.format("%.2f", sliderBrilho.getValue()));
+        tooltip.setShowDelay(Duration.ZERO);
+        tooltip.setShowDuration(Duration.INDEFINITE);
+        tooltip.setHideDelay(Duration.ZERO);
+        sliderBrilho.setTooltip(tooltip);
+
         sliderBrilho.valueProperty().addListener((obs, oldVal, newVal) -> {
             if (imagemBase != null) {
                 ultimaImagem.push(imagemAlterada.getImage()); // registro para desfazer
                 filtros.ajustarBrilho(imagemOriginal, imagemAlterada, newVal.doubleValue());
+                tooltip.setText(String.format("%.2f", (double) newVal));
             }
         });
     }
@@ -166,7 +176,7 @@ public class Controller {
 
     @FXML
     void desfazer(ActionEvent event) {
-        if(!ultimaImagem.isEmpty()){
+        if (!ultimaImagem.isEmpty()) {
             refazerImagem = imagemAlterada.getImage();
             imagemAnterior = ultimaImagem.pop();
             imagemAlterada.setImage(imagemAnterior);
@@ -175,7 +185,7 @@ public class Controller {
 
     @FXML
     void refazer(ActionEvent event) {
-        if(refazerImagem != null){
+        if (refazerImagem != null) {
             imagemAlterada.setImage(refazerImagem);
         }
     }
@@ -188,7 +198,7 @@ public class Controller {
 
     @FXML
     void setDarkTheme(ActionEvent event) {
-        if(isLightTheme){
+        if (isLightTheme) {
             Application.setUserAgentStylesheet(new PrimerDark().getUserAgentStylesheet());
             isLightTheme = false;
         }
@@ -282,7 +292,7 @@ public class Controller {
     @FXML
     void diminuir(ActionEvent event) {
         ultimaImagem.push(imagemAlterada.getImage());
-        transformacoes.diminuir(imagemAlterada,imagemAlterada);
+        transformacoes.diminuir(imagemAlterada, imagemAlterada);
     }
 
     //Funções de Filtro
@@ -290,29 +300,25 @@ public class Controller {
     void greyscale(ActionEvent event) {
         ultimaImagem.push(imagemAlterada.getImage());
         filtros.greyscaleImagem(imagemOriginal, imagemAlterada);
-        if(filtros.getIsGreyscale()){
-            if (!isLightTheme){
+        if (filtros.getIsGreyscale()) {
+            if (!isLightTheme) {
                 greyscaleBtn.setStyle("-fx-background-color: #015801;");
-            }
-            else{
+            } else {
                 greyscaleBtn.setStyle("-fx-background-color: #00ff00;");
             }
-        }
-        else{
+        } else {
             greyscaleBtn.setStyle("");
         }
-
     }
 
     @FXML
     void threshold(ActionEvent event) {
         int valor = Integer.parseInt(valorThreshold.getText());
-        if (valor < 0){
+        if (valor < 0) {
             valor = 0;
             alerta("Digite um número válido para threshold!");
             valorThreshold.setText("0");
-        }
-        else if(valor > 255){
+        } else if (valor > 255) {
             valor = 255;
             valorThreshold.setText("255");
         }
@@ -326,8 +332,7 @@ public class Controller {
                 alerta("Digite um número válido para contraste!");
                 valorContraste.setText("1");
                 ultimaImagem.push(imagemAlterada.getImage());
-            }
-            else {
+            } else {
                 double contraste = Double.parseDouble(valorContraste.getText());
 
                 filtros.contrasteImagem(imagemOriginal, imagemAlterada, contraste);
@@ -350,14 +355,40 @@ public class Controller {
     }
 
     @FXML
-    public void passaAltaSobel(ActionEvent event){
+    public void passaAltaSobel(ActionEvent event) {
         ultimaImagem.push(imagemAlterada.getImage());
         filtros.PASobel(imagemOriginal, imagemAlterada);
     }
+
     @FXML
-    public void passaAltaRoberts(ActionEvent event){
+    public void passaAltaRoberts(ActionEvent event) {
         ultimaImagem.push(imagemAlterada.getImage());
         filtros.PARoberts(imagemOriginal, imagemAlterada);
+    }
+
+    //Morfologia Matemática
+    @FXML
+    void dilatacao(ActionEvent event) {
+        ultimaImagem.push(imagemAlterada.getImage());
+        morfologiaMatematica.operacaoMorfologica(imagemOriginal, imagemAlterada, "DILATACAO");
+    }
+
+    @FXML
+    void erosao(ActionEvent event) {
+        ultimaImagem.push(imagemAlterada.getImage());
+        morfologiaMatematica.operacaoMorfologica(imagemOriginal, imagemAlterada, "EROSAO");
+    }
+
+    @FXML
+    void abertura(ActionEvent event) {
+        ultimaImagem.push(imagemAlterada.getImage());
+        morfologiaMatematica.abertura(imagemOriginal, imagemAlterada);
+    }
+
+    @FXML
+    void fechamento(ActionEvent event) {
+        ultimaImagem.push(imagemAlterada.getImage());
+        morfologiaMatematica.fechamento(imagemOriginal, imagemAlterada);
     }
 
     //Permite carregar a imagem utilizando links externos
@@ -378,8 +409,7 @@ public class Controller {
             alert.setTitle("Entrada inválida");
             alert.setHeaderText("Erro");
             alert.showAndWait();
-        }
-        else {
+        } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Entrada inválida");
             alert.setHeaderText(mensagem);
