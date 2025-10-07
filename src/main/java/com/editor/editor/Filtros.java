@@ -8,10 +8,10 @@ import java.util.Arrays;
 
 public class Filtros extends ModificacoesImagens{
     private boolean isGreyscale = false;
-
-    public boolean getIsGreyscale(){
-        return isGreyscale;
-    }
+    private boolean isMediana = false;
+    private boolean isGaussiano = false;
+    private boolean isSolbel = false;
+    private boolean isRoberts = false;
 
     public void greyscaleImagem(ImageView imagemOriginal, ImageView imagemAlterada) {
         if (!isGreyscale) {
@@ -260,7 +260,6 @@ public class Filtros extends ModificacoesImagens{
     }
 
     public void PBGaussiano(ImageView imagemOriginal, ImageView imagemAlterada) {
-
         // Máscara Gaussiana 3x3 e o divisor (soma dos pesos = 16)
         final int[][] mascara = {
                 {1, 2, 1},
@@ -272,7 +271,6 @@ public class Filtros extends ModificacoesImagens{
         final int offset = tamanhoMascara / 2; // Offset de 1 para máscara 3x3
 
         processarImagem(imagemOriginal, imagemAlterada, (reader, writer, largura, altura) -> {
-
             // Varre a imagem, ignorando a borda de 1 pixel (onde a máscara 3x3 não pode ser centrada)
             for (int y = offset; y < altura - offset; y++) {
                 for (int x = offset; x < largura - offset; x++) {
@@ -324,4 +322,63 @@ public class Filtros extends ModificacoesImagens{
         });
     }
 
+    public boolean isGreyscale() {
+        return this.isGreyscale;
+    }
+
+    public void setGreyscale() {
+        this.isGreyscale = true;
+        this.isMediana = false;
+        this.isGaussiano = false;
+        this.isSolbel = false;
+        this.isRoberts = false;
+    }
+
+    public boolean isMediana() {
+        return this.isMediana;
+    }
+
+    public void setMediana() {
+        this.isGreyscale = false;
+        this.isMediana = true;
+        this.isGaussiano = false;
+        this.isSolbel = false;
+        this.isRoberts = false;
+    }
+
+    public boolean isGaussiano() {
+        return this.isGaussiano;
+    }
+
+    public void setGaussiano() {
+        this.isGreyscale = false;
+        this.isMediana = false;
+        this.isGaussiano = true;
+        this.isSolbel = false;
+        this.isRoberts = false;
+    }
+
+    public boolean isSolbel() {
+        return this.isSolbel;
+    }
+
+    public void setSolbel() {
+        this.isGreyscale = false;
+        this.isMediana = false;
+        this.isGaussiano = false;
+        this.isSolbel = true;
+        this.isRoberts = false;
+    }
+
+    public boolean isRoberts() {
+        return this.isRoberts;
+    }
+
+    public void setRoberts() {
+        this.isGreyscale = false;
+        this.isMediana = false;
+        this.isGaussiano = false;
+        this.isSolbel = false;
+        this.isRoberts = true;
+    }
 }

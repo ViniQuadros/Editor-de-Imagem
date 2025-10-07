@@ -3,6 +3,11 @@ package com.editor.editor;
 import javafx.scene.image.*;
 
 public class MorfologiaMatematica extends ModificacoesImagens{
+    private boolean isDilatacao;
+    private boolean isErosao;
+    private boolean isAbertura;
+    private boolean isFechamento;
+
     public void operacaoMorfologica(ImageView imagemOriginal, ImageView imagemAlterada, String operacao) {
         // 1. Definição do Elemento Estruturante (EE) (É igual para ambas as operações)
         final int[][] elementoEstruturante = {
@@ -187,5 +192,48 @@ public class MorfologiaMatematica extends ModificacoesImagens{
         WritableImage imagemFechada = operacaoMorfologica(imagemDilatada, "EROSAO");
 
         imagemAlterada.setImage(imagemFechada);
+    }
+
+    public boolean isDilatacao() {
+        return this.isDilatacao;
+    }
+
+    public void setDilatacao() {
+        isDilatacao = true;
+        isErosao = false;
+        isAbertura = false;
+        isFechamento = false;
+    }
+
+    public boolean isErosao() {
+        return this.isErosao;
+    }
+
+    public void setErosao() {
+        isDilatacao = false;
+        isErosao = true;
+        isAbertura = false;
+        isFechamento = false;    }
+
+    public boolean isAbertura() {
+        return this.isAbertura;
+    }
+
+    public void setAbertura() {
+        isDilatacao = false;
+        isErosao = false;
+        isAbertura = true;
+        isFechamento = false;
+    }
+
+    public boolean isFechamento() {
+        return this.isFechamento;
+    }
+
+    public void setFechamento() {
+        isDilatacao = false;
+        isErosao = false;
+        isAbertura = false;
+        isFechamento = true;
     }
 }

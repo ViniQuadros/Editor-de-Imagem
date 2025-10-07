@@ -62,6 +62,24 @@ public class Controller {
     // Filtros
     @FXML
     private Button greyscaleBtn;
+    @FXML
+    private Button gaussianoBtn;
+    @FXML
+    private Button medianaBtn;
+    @FXML
+    private Button passaAltaSobelBtn;
+    @FXML
+    private Button passaAltaRobertsBtn;
+    @FXML
+    private Button dilatacaoBtn;
+    @FXML
+    private Button erosaoBtn;
+    @FXML
+    private Button aberturaBtn;
+    @FXML
+    private Button fechamentoBtn;
+    @FXML
+    private Button[] allButtons;
 
     private Image imagemBase;
     @FXML
@@ -84,6 +102,18 @@ public class Controller {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
+        allButtons = new Button[]{
+                greyscaleBtn,
+                gaussianoBtn,
+                medianaBtn,
+                passaAltaSobelBtn,
+                passaAltaRobertsBtn,
+                dilatacaoBtn,
+                erosaoBtn,
+                aberturaBtn,
+                fechamentoBtn
+        };
 
         // Imagem Input
         imagemOriginal.fitWidthProperty().bind(inputImageContainer.widthProperty());
@@ -300,15 +330,8 @@ public class Controller {
     void greyscale(ActionEvent event) {
         ultimaImagem.push(imagemAlterada.getImage());
         filtros.greyscaleImagem(imagemOriginal, imagemAlterada);
-        if (filtros.getIsGreyscale()) {
-            if (!isLightTheme) {
-                greyscaleBtn.setStyle("-fx-background-color: #015801;");
-            } else {
-                greyscaleBtn.setStyle("-fx-background-color: #00ff00;");
-            }
-        } else {
-            greyscaleBtn.setStyle("");
-        }
+        filtros.setGreyscale();
+        changeColorBtn(filtros.isGreyscale(), greyscaleBtn);
     }
 
     @FXML
@@ -346,24 +369,32 @@ public class Controller {
     void mediana(ActionEvent event) {
         ultimaImagem.push(imagemAlterada.getImage());
         filtros.PBMediana(imagemOriginal, imagemAlterada);
+        filtros.setMediana();
+        changeColorBtn(filtros.isMediana(), medianaBtn);
     }
 
     @FXML
     void gaussiano(ActionEvent event) {
         ultimaImagem.push(imagemAlterada.getImage());
         filtros.PBGaussiano(imagemOriginal, imagemAlterada);
+        filtros.setGaussiano();
+        changeColorBtn(filtros.isGaussiano(), gaussianoBtn);
     }
 
     @FXML
     public void passaAltaSobel(ActionEvent event) {
         ultimaImagem.push(imagemAlterada.getImage());
         filtros.PASobel(imagemOriginal, imagemAlterada);
+        filtros.setSolbel();
+        changeColorBtn(filtros.isSolbel(), passaAltaSobelBtn);
     }
 
     @FXML
     public void passaAltaRoberts(ActionEvent event) {
         ultimaImagem.push(imagemAlterada.getImage());
         filtros.PARoberts(imagemOriginal, imagemAlterada);
+        filtros.setRoberts();
+        changeColorBtn(filtros.isRoberts(), passaAltaRobertsBtn);
     }
 
     //Morfologia Matemática
@@ -371,24 +402,32 @@ public class Controller {
     void dilatacao(ActionEvent event) {
         ultimaImagem.push(imagemAlterada.getImage());
         morfologiaMatematica.operacaoMorfologica(imagemOriginal, imagemAlterada, "DILATACAO");
+        morfologiaMatematica.setDilatacao();
+        changeColorBtn(morfologiaMatematica.isDilatacao(), dilatacaoBtn);
     }
 
     @FXML
     void erosao(ActionEvent event) {
         ultimaImagem.push(imagemAlterada.getImage());
         morfologiaMatematica.operacaoMorfologica(imagemOriginal, imagemAlterada, "EROSAO");
+        morfologiaMatematica.setErosao();
+        changeColorBtn(morfologiaMatematica.isErosao(), erosaoBtn);
     }
 
     @FXML
     void abertura(ActionEvent event) {
         ultimaImagem.push(imagemAlterada.getImage());
         morfologiaMatematica.abertura(imagemOriginal, imagemAlterada);
+        morfologiaMatematica.setAbertura();
+        changeColorBtn(morfologiaMatematica.isAbertura(), aberturaBtn);
     }
 
     @FXML
     void fechamento(ActionEvent event) {
         ultimaImagem.push(imagemAlterada.getImage());
         morfologiaMatematica.fechamento(imagemOriginal, imagemAlterada);
+        morfologiaMatematica.setFechamento();
+        changeColorBtn(morfologiaMatematica.isFechamento(), fechamentoBtn);
     }
 
     //Permite carregar a imagem utilizando links externos
@@ -417,4 +456,29 @@ public class Controller {
         }
     }
 
+    private void changeColorBtn(boolean filter, Button button){
+        if (filter) {
+            activateBtn(button);
+        } else {
+            deactivateBtn(button);
+        }
+    }
+
+    private void activateBtn(Button button){
+        if (!isLightTheme) {
+            button.setStyle("-fx-background-color: #015801;");
+        } else {
+            button.setStyle("-fx-background-color: #00ff00;");
+        }
+        deactivateBtn(button);
+    }
+
+    private void deactivateBtn(Button button){
+        for(Button b : allButtons){
+            if(b == button){
+                continue;
+            }
+            b.setStyle("");
+        }
+    }
 }

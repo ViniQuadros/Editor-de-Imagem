@@ -167,8 +167,8 @@
                                     </Label>
                                     <HBox alignment="CENTER" spacing="8">
                                        <children>
-                                          <Button fx:id="passaAltaRoberts" maxWidth="100.0" minWidth="100.0" onAction="#passaAltaRoberts" text="Roberts" />
-                                          <Button fx:id="passaAltaSobel" maxWidth="100.0" minWidth="100.0" onAction="#passaAltaSobel" text="Sobel" />
+                                          <Button fx:id="passaAltaRobertsBtn" maxWidth="100.0" minWidth="100.0" onAction="#passaAltaRoberts" text="Roberts" />
+                                          <Button fx:id="passaAltaSobelBtn" maxWidth="100.0" minWidth="100.0" onAction="#passaAltaSobel" text="Sobel" />
                                        </children>
                                     </HBox>
                                     <Label text="Threshold">
