@@ -1,5 +1,7 @@
 package com.editor.editor;
 
+import java.util.List;
+import java.util.ArrayList;
 import javafx.scene.image.*;
 import javafx.scene.paint.Color;
 
@@ -324,8 +326,135 @@ public class Filtros extends ModificacoesImagens{
         });
     }
 
+    public void  afinamentoZhangSuen(ImageView imagemOriginal, ImageView imagemAlterada) {
+        PASobel(imagemOriginal, imagemAlterada);
+        binarizarImagem(imagemAlterada, imagemAlterada, 0.3);
+        processarImagem(imagemAlterada, imagemAlterada, (reader, writer, largura, altura) -> {
+            // Copia a imagem binária para um array 2D de inteiros (0 ou 1)
+            int[][] pixels = new int[altura][largura];
+            for (int y = 0; y < altura; y++) {
+                for (int x = 0; x < largura; x++) {
+                    Color c = reader.getColor(x, y);
+                    pixels[y][x] = (c.getRed() > 0.5) ? 1 : 0;
+                }
+            }
 
+            boolean mudou;
+            do {
+                mudou = false;
 
+                // 1ª etapa
+                List<int[]> apagar = new ArrayList<>();
+                for (int y = 1; y < altura - 1; y++) {
+                    for (int x = 1; x < largura - 1; x++) {
+                        if (pixels[y][x] == 1 && verificaPrimeiraEtapa(pixels, x, y)) {
+                            apagar.add(new int[]{x, y});
+                        }
+                    }
+                }
+                for (int[] p : apagar) {
+                    pixels[p[1]][p[0]] = 0;
+                    mudou = true;
+                }
+
+                // 2ª etapa
+                apagar.clear();
+                for (int y = 1; y < altura - 1; y++) {
+                    for (int x = 1; x < largura - 1; x++) {
+                        if (pixels[y][x] == 1 && verificaSegundaEtapa(pixels, x, y)) {
+                            apagar.add(new int[]{x, y});
+                        }
+                    }
+                }
+                for (int[] p : apagar) {
+                    pixels[p[1]][p[0]] = 0;
+                    mudou = true;
+                }
+
+            } while (mudou);
+
+            // Escreve de volta na imagem de saída
+            for (int y = 0; y < altura; y++) {
+                for (int x = 0; x < largura; x++) {
+                    if (pixels[y][x] == 1) {
+                        writer.setColor(x, y, Color.WHITE);
+                    } else {
+                        writer.setColor(x, y, Color.BLACK);
+                    }
+                }
+            }
+        });
+    }
+
+    private boolean verificaPrimeiraEtapa(int[][] pixels, int x, int y) {
+        int[] viz = getVizinhos(pixels, x, y);
+        int contPretoParaBranco = contaTransicoes(viz);
+        int contVizinhosPretos = contaVizinhos(viz);
+
+        return (contVizinhosPretos >= 2 && contVizinhosPretos <= 6 &&
+                contPretoParaBranco == 1 &&
+                (viz[0] * viz[2] * viz[4] == 0) &&
+                (viz[2] * viz[4] * viz[6] == 0));
+    }
+
+    private boolean verificaSegundaEtapa(int[][] pixels, int x, int y) {
+        int[] viz = getVizinhos(pixels, x, y);
+        int contPretoParaBranco = contaTransicoes(viz);
+        int contVizinhosPretos = contaVizinhos(viz);
+
+        return (contVizinhosPretos >= 2 && contVizinhosPretos <= 6 &&
+                contPretoParaBranco == 1 &&
+                (viz[0] * viz[2] * viz[6] == 0) &&
+                (viz[0] * viz[4] * viz[6] == 0));
+    }
+
+    // P2 a P9 (sentido horário, começando pelo de cima)
+    private int[] getVizinhos(int[][] pixels, int x, int y) {
+        return new int[]{
+                pixels[y - 1][x],     // P2
+                pixels[y - 1][x + 1], // P3
+                pixels[y][x + 1],     // P4
+                pixels[y + 1][x + 1], // P5
+                pixels[y + 1][x],     // P6
+                pixels[y + 1][x - 1], // P7
+                pixels[y][x - 1],     // P8
+                pixels[y - 1][x - 1]  // P9
+        };
+    }
+
+    // Conta transições de 0→1 entre P2..P9 e voltando para P2
+    private int contaTransicoes(int[] viz) {
+        int cont = 0;
+        for (int i = 0; i < viz.length; i++) {
+            int atual = viz[i];
+            int prox = viz[(i + 1) % viz.length];
+            if (atual == 0 && prox == 1) cont++;
+        }
+        return cont;
+    }
+
+    // Conta quantos vizinhos são pretos (1)
+    private int contaVizinhos(int[] viz) {
+        int cont = 0;
+        for (int v : viz) cont += v;
+        return cont;
+    }
+
+    public void binarizarImagem(ImageView imagemOriginal, ImageView imagemBinarizada, double limiar) {
+        processarImagem(imagemOriginal, imagemBinarizada, (reader, writer, largura, altura) -> {
+            for (int y = 0; y < altura; y++) {
+                for (int x = 0; x < largura; x++) {
+                    Color c = reader.getColor(x, y);
+                    double intensidade = c.getRed(); // imagem já deve estar em grayscale
+                    if (intensidade >= limiar) {
+                        writer.setColor(x, y, Color.WHITE);
+                    } else {
+                        writer.setColor(x, y, Color.BLACK);
+                    }
+                }
+            }
+        });
+    }
     public boolean isGreyscale() {
         return this.isGreyscale;
     }

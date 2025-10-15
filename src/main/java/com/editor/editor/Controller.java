@@ -404,6 +404,7 @@ public class Controller {
     public void afinamento(ActionEvent event){
         ultimaImagem.push(imagemAlterada.getImage());
         filtros.setAfinamento();
+        filtros.afinamentoZhangSuen(imagemOriginal, imagemAlterada);
         changeColorBtn(filtros.isAfinamento(), afinamentoBtn);
     }
 
