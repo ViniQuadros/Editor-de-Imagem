@@ -12,6 +12,7 @@ public class Filtros extends ModificacoesImagens{
     private boolean isGaussiano = false;
     private boolean isSolbel = false;
     private boolean isRoberts = false;
+    private boolean isAfinamento = false;
 
     public void greyscaleImagem(ImageView imagemOriginal, ImageView imagemAlterada) {
         if (!isGreyscale) {
@@ -115,8 +116,8 @@ public class Filtros extends ModificacoesImagens{
                 {0, 1}, {-1, 0}
         };
         greyscaleImagem(imagemOriginal, imagemAlterada);
-
-        processarImagem(imagemOriginal, imagemAlterada, (reader, writer, largura, altura) -> {
+        PBGaussiano(imagemAlterada, imagemAlterada);
+        processarImagem(imagemAlterada, imagemAlterada, (reader, writer, largura, altura) -> {
             // Converte a imagem para grayscale antes do for
 
             for (int y = 0; y < altura - 1; y++) {
@@ -156,8 +157,9 @@ public class Filtros extends ModificacoesImagens{
         };
 
         greyscaleImagem(imagemOriginal, imagemAlterada);
+        PBGaussiano(imagemAlterada, imagemAlterada);
 
-        processarImagem(imagemOriginal, imagemAlterada, (reader, writer, largura, altura) -> {
+        processarImagem(imagemAlterada, imagemAlterada, (reader, writer, largura, altura) -> {
             // percorre sem pegar bordas, por isso o -1
             for (int y = 1; y < altura - 1; y++) {
                 for (int x = 1; x < largura - 1; x++) {
@@ -322,6 +324,8 @@ public class Filtros extends ModificacoesImagens{
         });
     }
 
+
+
     public boolean isGreyscale() {
         return this.isGreyscale;
     }
@@ -380,5 +384,19 @@ public class Filtros extends ModificacoesImagens{
         this.isGaussiano = false;
         this.isSolbel = false;
         this.isRoberts = true;
+    }
+
+
+    public boolean isAfinamento() {
+        return this.isAfinamento;
+    }
+
+    public void setAfinamento() {
+        this.isGreyscale = false;
+        this.isMediana = false;
+        this.isGaussiano = false;
+        this.isSolbel = false;
+        this.isRoberts = false;
+        this.isAfinamento = true;
     }
 }

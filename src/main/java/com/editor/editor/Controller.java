@@ -79,6 +79,8 @@ public class Controller {
     @FXML
     private Button fechamentoBtn;
     @FXML
+    private Button afinamentoBtn;
+    @FXML
     private Button[] allButtons;
 
     private Image imagemBase;
@@ -112,7 +114,8 @@ public class Controller {
                 dilatacaoBtn,
                 erosaoBtn,
                 aberturaBtn,
-                fechamentoBtn
+                fechamentoBtn,
+                afinamentoBtn
         };
 
         // Imagem Input
@@ -395,6 +398,13 @@ public class Controller {
         filtros.PARoberts(imagemOriginal, imagemAlterada);
         filtros.setRoberts();
         changeColorBtn(filtros.isRoberts(), passaAltaRobertsBtn);
+    }
+
+    @FXML
+    public void afinamento(ActionEvent event){
+        ultimaImagem.push(imagemAlterada.getImage());
+        filtros.setAfinamento();
+        changeColorBtn(filtros.isAfinamento(), afinamentoBtn);
     }
 
     //Morfologia Matemática
