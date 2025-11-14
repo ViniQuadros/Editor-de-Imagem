@@ -207,7 +207,6 @@ public class Filtros extends ModificacoesImagens{
                 }
             }
         });
-
     }
 
     public void PBMediana(ImageView imagemOriginal, ImageView imagemAlterada) {
