@@ -5,13 +5,18 @@ import atlantafx.base.theme.PrimerLight;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.print.PrinterJob;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import javax.imageio.ImageIO;
@@ -403,6 +408,7 @@ public class Controller {
     @FXML
     public void afinamento(ActionEvent event){
         ultimaImagem.push(imagemAlterada.getImage());
+        filtros.afinamento(imagemOriginal, imagemAlterada, 0.5);
         filtros.setAfinamento();
         filtros.afinamentoZhangSuen(imagemOriginal, imagemAlterada);
         changeColorBtn(filtros.isAfinamento(), afinamentoBtn);
@@ -439,6 +445,26 @@ public class Controller {
         morfologiaMatematica.fechamento(imagemOriginal, imagemAlterada);
         morfologiaMatematica.setFechamento();
         changeColorBtn(morfologiaMatematica.isFechamento(), fechamentoBtn);
+    }
+
+    //Chama a tela do Desafio
+    @FXML
+    void desafio(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("desafio.fxml"));
+            Parent root = fxmlLoader.load();
+
+            Scene sceneDesafio = new Scene(root);
+            Stage stageDesafio = new Stage();
+
+            stageDesafio.setTitle("Desafio");
+            stageDesafio.initModality(Modality.APPLICATION_MODAL);
+
+            stageDesafio.setScene(sceneDesafio);
+            stageDesafio.show();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     //Permite carregar a imagem utilizando links externos

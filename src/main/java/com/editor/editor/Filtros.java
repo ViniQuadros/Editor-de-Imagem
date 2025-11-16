@@ -207,7 +207,6 @@ public class Filtros extends ModificacoesImagens{
                 }
             }
         });
-
     }
 
     public void PBMediana(ImageView imagemOriginal, ImageView imagemAlterada) {
@@ -500,6 +499,74 @@ public class Filtros extends ModificacoesImagens{
         this.isRoberts = true;
     }
 
+    public void afinamento(ImageView imagemOriginal, ImageView imagemAlterada, double threshold) {
+        processarImagem(imagemOriginal, imagemAlterada, (reader, writer, largura, altura) -> {
+
+            boolean[][] bin = new boolean[altura][largura];
+
+            // 1️⃣ Binariza a imagem (foreground = preto)
+            for (int y = 0; y < altura; y++) {
+                for (int x = 0; x < largura; x++) {
+                    Color c = reader.getColor(x, y);
+                    double luminancia = 0.299 * c.getRed() + 0.587 * c.getGreen() + 0.114 * c.getBlue();
+                    bin[y][x] = luminancia <= threshold;
+                }
+            }
+
+            // 2️⃣ Gera matriz de contorno (true = pixel de contorno)
+            boolean[][] contorno = new boolean[altura][largura];
+
+            for (int y = 1; y < altura - 1; y++) {
+                for (int x = 1; x < largura - 1; x++) {
+                    if (!bin[y][x]) continue; // fundo
+
+                    // Verifica se o pixel tem pelo menos um vizinho de fundo
+                    boolean borda = false;
+                    for (int j = -1; j <= 1 && !borda; j++) {
+                        for (int i = -1; i <= 1; i++) {
+                            if (!bin[y + j][x + i]) {
+                                borda = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    contorno[y][x] = borda;
+                }
+            }
+
+            // 3️⃣ Opcional: refina o contorno removendo pixels duplos (para garantir 1px)
+            boolean[][] refinado = refinarContorno(contorno, largura, altura);
+
+            // 4️⃣ Escreve o resultado
+            for (int y = 0; y < altura; y++) {
+                for (int x = 0; x < largura; x++) {
+                    writer.setColor(x, y, refinado[y][x] ? Color.BLACK : Color.WHITE);
+                }
+            }
+        });
+    }
+
+    // 🔧 Remove duplicações e mantém apenas pixels essenciais do contorno
+    private boolean[][] refinarContorno(boolean[][] contorno, int largura, int altura) {
+        boolean[][] resultado = new boolean[altura][largura];
+        for (int y = 1; y < altura - 1; y++) {
+            for (int x = 1; x < largura - 1; x++) {
+                if (!contorno[y][x]) continue;
+
+                int vizinhos = 0;
+                for (int j = -1; j <= 1; j++) {
+                    for (int i = -1; i <= 1; i++) {
+                        if (contorno[y + j][x + i]) vizinhos++;
+                    }
+                }
+
+                // Mantém o pixel se ele não for totalmente cercado (evita borda grossa)
+                resultado[y][x] = vizinhos <= 3;
+            }
+        }
+        return resultado;
+    }
 
     public boolean isAfinamento() {
         return this.isAfinamento;
