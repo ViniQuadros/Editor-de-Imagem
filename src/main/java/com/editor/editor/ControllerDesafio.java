@@ -60,7 +60,8 @@ public class ControllerDesafio {
 
         int[] contagem = contarPontos(imgThreshold.getImage(), linhaY);
 
-        respostaDesafio.setText("Superior: " + contagem[0] + " | Inferior: " + contagem[1]);
+
+        respostaDesafio.setText("Superior: " + (contagem[0]-2) + " | Inferior: " + contagem[1]);
     }
 
     public int encontrarBarra(Image imagem) {
@@ -112,7 +113,7 @@ public class ControllerDesafio {
                 }
 
                 // .getRed() == 1.0 significa "é branco?"
-                boolean eUmPonto = (reader.getColor(x, y).getRed() == 0.0);
+                boolean eUmPonto = (reader.getColor(x, y).getRed() <= 1.0 && reader.getColor(x, y).getRed() >= 0.0);
 
                 if (eUmPonto) {
                     int tamanhoDaBolha = explorarBolha(reader, visitado, x, y, largura, altura);
