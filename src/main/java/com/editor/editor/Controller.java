@@ -459,9 +459,10 @@ public class Controller {
 
             stageDesafio.setTitle("Desafio");
             stageDesafio.initModality(Modality.APPLICATION_MODAL);
-
+            stageDesafio.getIcons().add(new Image(getClass().getResourceAsStream("/images/vizualize.png")));
             stageDesafio.setScene(sceneDesafio);
             stageDesafio.show();
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

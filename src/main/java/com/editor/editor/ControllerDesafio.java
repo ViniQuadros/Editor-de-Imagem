@@ -60,8 +60,9 @@ public class ControllerDesafio {
 
         int[] contagem = contarPontos(imgThreshold.getImage(), linhaY);
 
-
         respostaDesafio.setText("Superior: " + (contagem[0]-2) + " | Inferior: " + contagem[1]);
+
+        imagemDesafio.setImage(imgThreshold.getImage());
     }
 
     public int encontrarBarra(Image imagem) {
